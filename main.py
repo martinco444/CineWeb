@@ -6,6 +6,9 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import time
+from selenium.webdriver.support.ui import Select
+from selenium.common.exceptions import NoSuchElementException
+
 
 def peliculas_cinecolombia():
 
@@ -145,7 +148,7 @@ def funciones_cinecolombia():
                     funciones += f'{enlace_pelicula}\n'
 
         except Exception as e:
-            print(f"No se pudo encontrar horarios: {e}")
+            print(e)
 
         driver.back()
 
@@ -196,9 +199,7 @@ def peliculas_cinepolis():
 
 def funciones_cinepolis():
     funciones = ""
-
     driver = webdriver.Chrome()  
-
     url = 'https://cinepolis.com.co/cartelera/cali-colombia'
 
     driver.get(url)
@@ -219,7 +220,7 @@ def funciones_cinepolis():
             for formato, horario in zip(formato_text, horarios_text):
 
                 funciones += f'{titulo}|'
-                funciones += f'Cinepolis limonar|'
+                funciones += f'Limonar|'
                 funciones += f'{formato}|'
                 funciones += f'{horario}|'
                 funciones += f'{url}\n'    
@@ -230,13 +231,8 @@ def funciones_cinepolis():
     driver.quit()
     return funciones
 
-def cinemark():
-    driver = webdriver.Chrome()
-
-    url = 'https://www.cinemark.com.co/ciudad/cali/pacific-mall'
-
-    driver.get(url)
-
+def peliculas_cinemark():
+    funciones = ''
     clasificacion_dict = {
         '+ 7': '+ 7 años',
         '+ 12': '+ 12 años',
@@ -245,18 +241,25 @@ def cinemark():
         'TODOS': 'TODOS'
     }
 
-    funciones = ""
-    funciones_set = set()
+    driver = webdriver.Chrome()
+    url = 'https://www.cinemark.com.co/ciudad/cali/pacific-mall'
+    driver.get(url)
 
-    try:
-        peliculas = WebDriverWait(driver, 10).until(
-            EC.presence_of_all_elements_located((By.CLASS_NAME, 'section-detail__information-badge'))
-        )
+    peliculas = WebDriverWait(driver, 10).until(
+        EC.presence_of_all_elements_located((By.CLASS_NAME, 'section-detail__information-badge'))
+    )
 
-        for pelicula in peliculas:
-            titulo = pelicula.find_element(By.CLASS_NAME, 'section-detail__title').text.strip()
-            duracion = pelicula.find_element(By.CLASS_NAME, 'clasification--TIME').text.strip()
+    peliculas_info = []  # Lista para almacenar información de cada película
+    enlaces_procesados = set()  # Conjunto para realizar un seguimiento de los enlaces procesados
+
+    for pelicula in peliculas:
+        try:
+            titulo_element = pelicula.find_element(By.CLASS_NAME, 'section-detail__title')
+            duracion_element = pelicula.find_element(By.CLASS_NAME, 'clasification--TIME')
             peli = pelicula.text
+
+            titulo = titulo_element.text.strip()
+            duracion = duracion_element.text.strip()
 
             for clasificacion_keyword, clasificacion_value in clasificacion_dict.items():
                 if clasificacion_keyword in peli:
@@ -265,19 +268,70 @@ def cinemark():
             else:
                 clasificacion = ''
 
-            if titulo not in funciones_set and titulo != "":
-                funciones += f'{titulo}; {duracion}; {clasificacion}; ; Cinemark\n'
-                funciones_set.add(titulo)
+            link = pelicula.find_element(By.TAG_NAME, 'a').get_attribute('href')
+            
+            # Verificar si el enlace ya se ha procesado
+            if titulo not in enlaces_procesados and titulo != '':
+                peliculas_info.append((titulo, duracion, clasificacion, link))
+                enlaces_procesados.add(titulo)
 
-    except Exception as e:
-        print(f'Error: {e}')
+        except:
+            print
+
+    for titulo, duracion, clasificacion, link in peliculas_info:
+        driver.get(link)
+        try:
+            titulo_original = driver.find_element(By.XPATH, "//h4[text()='título original']/following-sibling::p").text
+            actores = driver.find_element(By.XPATH, "//h4[text()='reparto']/following-sibling::p").text
+            sinopsis = driver.find_element(By.XPATH, "//h4[text()='sinopsis']/following-sibling::p/span").text
+
+            pelicula_format = f"{titulo}|{duracion}|{clasificacion}||Cinemark|{sinopsis}|{titulo_original}|||{actores}|\n"
+            funciones += pelicula_format
+
+        except Exception as e:
+            print(e)
+
+        driver.back()
 
     driver.quit()
-    
     return funciones
 
+def funciones_cinemark():
+    funciones = ""
+    driver = webdriver.Chrome()  
+    url = 'https://www.cinemark.com.co/ciudad/cali/pacific-mall'
 
-def izimovie():
+    driver.get(url)
+
+    peliculas = WebDriverWait(driver, 10).until(
+        EC.presence_of_all_elements_located((By.CLASS_NAME, 'section-detail__schedule'))
+    )
+     
+    for pelicula in peliculas:
+        try:
+            titulo = pelicula.find_element(By.CLASS_NAME, 'section-detail__title').text.strip()
+            container = pelicula.find_elements(By.CLASS_NAME, 'theater-detail__container--principal__co')
+            url = pelicula.find_element(By.TAG_NAME, 'a').get_attribute('href') 
+
+            for contain in container:
+                formato_elements = contain.find_elements(By.CSS_SELECTOR, ".formats__item")
+                formatos = ' '.join([element.text for element in formato_elements])
+                horarios_elements = contain.find_elements(By.CLASS_NAME, "sessions__button--runtime")
+                horarios = [element.text for element in horarios_elements]
+            
+                funciones += f'{titulo}|'
+                funciones += f'Pacific Mall|'
+                funciones += f'{formatos}|'
+                funciones += f'{horarios}|'
+                funciones += f'{url}|'
+                funciones += f'\n'
+
+        except Exception as e:
+            print(e)
+
+    return funciones
+
+def peliculas_izimovie():
     funciones = ""
     funciones_set = set()
 
@@ -294,79 +348,240 @@ def izimovie():
 
             titulo = pelicula.find_element(By.CLASS_NAME, 'movie__title').text.strip()
             duracion = pelicula.find_element(By.CLASS_NAME, 'movie__time').text.strip()
+            clasificacion = pelicula.find_element(By.XPATH, ".//span[@class='icon-childcare']/following-sibling::p").text
+            generos = pelicula.find_element(By.XPATH, ".//span[@class='icon-theaters']/following-sibling::p").text
 
             if titulo not in funciones_set:
 
-                funciones +=(f'{titulo}; ')
-                funciones +=(f'{duracion}; ')
-                funciones += '; '  
-                funciones += '; '
+                funciones += f'{titulo}|'
+                funciones += f'{duracion}|'
+                funciones += f'{clasificacion}|'  
+                funciones += f'{generos}|'
                 funciones += 'Izimovie\n'
 
                 funciones_set.add(titulo)
+
     except Exception as e:
         print(f'Error: {e}')
 
     driver.quit()
     return funciones
 
-def royalfilms():
-
+def funciones_izimovie():
     funciones = ""
-    funciones_set = set()
-
     driver = webdriver.Chrome()
 
-    driver.get('https://royal-films.com/informacion/cali/teatro/12/multicine-jardin-plaza-cali/cartelera')
+    driver.get('https://izi.movie')
 
     try:
-        peliculas = WebDriverWait(driver, 10).until(
-            EC.presence_of_all_elements_located((By.CLASS_NAME, 'info'))
+        peliculas = WebDriverWait(driver, 1).until(
+            EC.presence_of_all_elements_located((By.CLASS_NAME, 'movie--time'))
         )
 
         for pelicula in peliculas:
 
-            titulo = pelicula.find_element(By.TAG_NAME, 'h3').text.strip()
-            genero = pelicula.find_element(By.TAG_NAME, 'small').text.strip()
+            titulo = pelicula.find_element(By.CLASS_NAME, 'movie__title').text.strip()
+            horarios_elements = pelicula.find_elements(By.XPATH, ".//li[@class='time-select__item']")
+            horarios = [horario.text.strip() for horario in horarios_elements]
+            formato_element = pelicula.find_element(By.XPATH, ".//p[contains(., 'Tipo:')]")
+            formato = formato_element.text.split(":")[-1].strip()
+            url = pelicula.find_element(By.CLASS_NAME, 'movie__title').get_attribute('href')
 
-            if titulo not in funciones_set:
+            funciones += f'{titulo}|'
+            funciones += f'Aquarela|'
+            funciones += f'{formato}|'    
+            funciones += f'{horarios}|'    
+            funciones += f'{url}\n'      
 
-                funciones +=(f'{titulo}; ')
-                funciones += '; '
-                funciones += '; '
-                funciones +=(f'{genero}; ')
-                funciones +=('Royalfilms\n')  
-
-                funciones_set.add(titulo)
-                
     except Exception as e:
         print(f'Error: {e}')
 
     driver.quit()
     return funciones
 
+def peliculas_royalfilms():
+    funciones = ""
+    funciones_set = set()
+    links_peliculas = []
+    sinopsis = ""
 
-pelis_cinecolombia = peliculas_cinecolombia()
-cinepolis = peliculas_cinepolis()
-# # peliculas_cinemark = cinemark()
-# # peliculas_izimovie = izimovie()
-# # peliculas_royalfilms = royalfilms()
+    driver = webdriver.Chrome()
 
-with open("./python/peliculas.txt","w", encoding="UTF-8") as archivo:
-    archivo.write(pelis_cinecolombia)
-    archivo.write(cinepolis)
-    # archivo.write(peliculas_cinemark)
+    driver.get('https://royal-films.com/cartelera/cali')
+
+    form = WebDriverWait(driver, 10).until(
+        EC.presence_of_element_located((By.ID, 'form'))
+    )
+
+    elemento_select = form.find_element(By.XPATH, '//*[@id="form"]/div/div[2]/select')
+    select = Select(elemento_select)
+    select.select_by_value('cali')
+
+    elemento_boton = form.find_element(By.XPATH, '//button[@type="submit"]')
+    elemento_boton.click()
+
+    peliculas = WebDriverWait(driver, 10).until(
+        EC.presence_of_all_elements_located((By.CLASS_NAME, 'movie-box'))
+    )
+
+    for pelicula in peliculas:
+        try:
+            link = pelicula.get_attribute('href')
+            links_peliculas.append(link)
+
+        except Exception as e:
+            print(e)
+
+    for link in links_peliculas:
+        driver.get(link)
+        
+        detalles = WebDriverWait(driver, 10).until(
+            EC.element_to_be_clickable((By.XPATH, '//*[@id="movie"]/div/div/div[2]/h2'))
+        )
+
+        try:
+            titulo = detalles.find_element(By.XPATH, '//*[@id="movie"]/div/div/div[2]/h2').text.strip()
+            duracion = detalles.find_element(By.XPATH, '/html/body/app-root/div[2]/app-movie/section[2]/div/div/div[2]/div/div[1]/ul[1]/li[2]').text.strip()
+            clasificacion = detalles.find_element(By.XPATH, '/html/body/app-root/div[2]/app-movie/section[2]/div/div/div[2]/div/div[1]/ul[2]/li[last()]').text.strip()
+            generos_element = detalles.find_elements(By.XPATH, '/html/body/app-root/div[2]/app-movie/section[2]/div/div/div[2]/div/div[1]/ul[2]/li[position() < last()]')
+            generos = [genero.text.strip() for genero in generos_element]
+            
+            try:
+                sinopsis_boton = WebDriverWait(driver, 1).until(
+                    EC.element_to_be_clickable((By.XPATH, '//*[@id="movie"]/div/div/div[2]/div/div[2]/p/a'))
+                )
+                
+                if sinopsis_boton:
+                    sinopsis_boton.click()
+
+                sinopsis = detalles.find_element(By.XPATH, '//*[@id="movie"]/div/div/div[2]/div/div[2]/p').text.strip()
+            except:
+                sinopsis = detalles.find_element(By.XPATH, '//*[@id="movie"]/div/div/div[2]/div/div[2]/p').text.strip()
+            
+            titulo_original = detalles.find_element(By.XPATH, '//*[@id="movie"]/div/div/div[2]/div/div[2]/table/tbody/tr[2]/td').text.strip()
+            director = detalles.find_element(By.XPATH,'//*[@id="movie"]/div/div/div[2]/div/div[2]/table/tbody/tr[4]/td').text.strip()
+            actores_elements = detalles.find_elements(By.XPATH, '//*[@id="movie"]/div/div/div[2]/div/div[2]/table/tbody/tr[3]/td')
+            actores = [actor.text.strip() for actor in actores_elements]
+
+            if titulo not in funciones_set:
+
+                funciones += f'{titulo}|'
+                funciones += f'{duracion}|'
+                funciones +=  f'{clasificacion}|'
+                funciones += f'{generos}|'
+                funciones += f'Royalfilms|'
+                funciones += f'{sinopsis}|'
+                funciones += f'{titulo_original}|'
+                funciones += f'{director}|'
+                funciones += f'{actores}|'
+                funciones += f'|'
+                funciones += '\n'
+
+                funciones_set.add(titulo)
+
+        except Exception as e:
+            print(e)
+        
+        driver.back()
+
+    driver.quit()
+    return funciones
+
+def funciones_royalfilms():
+    funciones = ""
+    links_peliculas = []
+
+    driver = webdriver.Chrome()
+
+    driver.get('https://royal-films.com/cartelera/cali')
+
+    while True:
+        try:
+            form = WebDriverWait(driver, 10).until(
+                EC.presence_of_element_located((By.ID, 'form'))
+            )
+
+            elemento_select = form.find_element(By.XPATH, '//*[@id="form"]/div/div[2]/select')
+            select = Select(elemento_select)
+            select.select_by_value('cali')
+
+            elemento_boton = form.find_element(By.XPATH, '//button[@type="submit"]')
+            elemento_boton.click()
+            break
+
+        except NoSuchElementException:
+            pass
+
+    peliculas = WebDriverWait(driver, 10).until(
+        EC.presence_of_all_elements_located((By.CLASS_NAME, 'movie-box'))
+    )
+
+    for pelicula in peliculas:
+        try:
+            link = pelicula.get_attribute('href')
+            links_peliculas.append(link)
+
+        except Exception as e:
+            print(e)
+
+    for link in links_peliculas:
+        driver.get(link)
+        time.sleep(5)
+
+        try:
+            titulo = driver.find_element(By.XPATH, '//*[@id="movie"]/div/div/div[2]/h2')
+            schedules = driver.find_elements(By.CLASS_NAME, 'schedules')
+
+            for schedule in schedules:
+                sala_nombres = schedule.find_elements(By.XPATH, './/li[1]/span')
+                formatos_elements = schedule.find_elements(By.XPATH, './/li[2]/span[1]')
+                horarios_elements = schedule.find_elements(By.XPATH, './/li[2]/span[position() > 1]')
+
+                sala_nombre = [sala.text.replace('\n', '') for sala in sala_nombres if sala.text.strip()]
+                formatos = [formato.text.replace('\n', '') for formato in formatos_elements if formato.text.strip()]
+                horarios = [horario.text.replace('\n', '') for horario in horarios_elements if horario.text.strip()]
+
+                formatos = [formato for formato in formatos if formato.strip() != ""]
+                horarios = [horario for horario in horarios if horario.strip() != ""]
+
+                if sala_nombre and formatos and horarios:
+                    funciones += f'{titulo.text}|'
+                    funciones += f'{sala_nombre}|'
+                    funciones += f'{formatos}|'
+                    funciones += f'{horarios}|'
+                    funciones += f'{link}\n' 
+
+        except Exception as e:
+            print(e)
+        
+        driver.back()
+
+    driver.quit()
+    return funciones
+
+
+# pelis_cinecolombia = peliculas_cinecolombia()
+# pelis_cinepolis = peliculas_cinepolis()
+# pelis_cinemark = peliculas_cinemark()
+# peliculas_izimovie = peliculas_izimovie()
+# pelis_royalfilms = peliculas_royalfilms()
+
+# with open("./python/peliculas.txt","w", encoding="UTF-8") as archivo:
+#     archivo.write(pelis_cinecolombia)
+#     archivo.write(pelis_cinepolis)
+#     archivo.write(pelis_cinemark)
     # archivo.write(peliculas_izimovie)
-    # archivo.write(peliculas_royalfilms)
+    # archivo.write(pelis_royalfilms)
 
-cineco = funciones_cinecolombia()
-cinepolis = funciones_cinepolis()
+# func_cinecolombia = funciones_cinecolombia()
+# func_cinepolis = funciones_cinepolis()
+# func_cinemark = funciones_cinemark()
+# func_izimovie = funciones_izimovie()
+# func_royalfilms = funciones_royalfilms()
 
-with open('./python/funciones.txt', 'w', encoding='UTF-8') as archivo:
-    archivo.write(cineco)
-
-
-
-
-
-
+# with open('./python/funciones.txt', 'w', encoding='UTF-8') as archivo:
+#     archivo.write(func_cinecolombia)
+#     archivo.write(func_cinepolis)
+#     archivo.write(func_cinemark)
+    # archivo.write(func_izimovie)
+    # archivo.write(func_royalfilms)
