@@ -8,6 +8,7 @@ from selenium.webdriver.support import expected_conditions as EC
 import time
 from selenium.webdriver.support.ui import Select
 from selenium.common.exceptions import NoSuchElementException
+from selenium.common.exceptions import ElementNotInteractableException
 
 
 def peliculas_cinecolombia():
@@ -101,9 +102,7 @@ def peliculas_cinecolombia():
 def funciones_cinecolombia():
     funciones = ""
     url = 'https://www.cinecolombia.com/cali/cartelera'
-
     driver = webdriver.Chrome()
-
     driver.get(url)
 
     peliculas = WebDriverWait(driver, 10).until(
@@ -115,51 +114,48 @@ def funciones_cinecolombia():
             enlace_pelicula = pelicula.get_attribute('href')
             driver.get(enlace_pelicula)
 
-            # Obtener el título de la película
             titulo = driver.find_element(By.CLASS_NAME, 'ezstring-field').text
 
-            # Buscar todos los elementos que representan salas de cine
-            salas = driver.find_elements(By.CLASS_NAME, 'show-times-collapse__title')
+            salas = WebDriverWait(driver, 10).until(
+                EC.presence_of_all_elements_located((By.CLASS_NAME, 'collapsible'))
+            )
 
+            time.sleep(2)
             for sala in salas:
-                sala_nombre = sala.text.strip()
+                sala_nombre = sala.find_element(By.CLASS_NAME, 'show-times-collapse__title').text.strip()
                 sala.click()
+                time.sleep(1)
 
-                # Esperar a que aparezcan los horarios (ajusta el selector según sea necesario)
-                horarios_element = WebDriverWait(driver, 20).until(
+                horarios_element = WebDriverWait(driver, 10).until(
                     EC.presence_of_all_elements_located((By.CLASS_NAME, 'show-times-group__times'))
                 )
 
-                # Buscar los elementos <span> dentro del <div> con clase 'show-times-group__attrs'
-                formatos_element = WebDriverWait(driver, 20).until(
+                formatos_element = WebDriverWait(driver, 10).until(
                     EC.presence_of_all_elements_located((By.CLASS_NAME, 'show-times-group__attrs'))
                 )
 
-                # Filtrar los elementos no vacíos en las listas de formatos y horarios
                 horarios = [horario.text.replace('\n', ', ') for horario in horarios_element if horario.text.strip() != '']
                 formatos = [formato.text.replace('\n', ' ') for formato in formatos_element if formato.text.strip()]
 
-                # Imprimir la información para cada sala
                 for formato, horario in zip(formatos, horarios):
                     funciones += f'{titulo}|'
-                    funciones += f'{sala_nombre}|'
+                    funciones += f'CineColombia {sala_nombre}|'
                     funciones += f'{formato}|'
                     funciones += f'{horario}|'
                     funciones += f'{enlace_pelicula}\n'
 
-        except Exception as e:
-            print(e)
+        except:
+            print
 
         driver.back()
 
     driver.quit()
     return funciones
 
+
 def peliculas_cinepolis():
     funciones = ""
-
-    driver = webdriver.Chrome()  
-
+    driver = webdriver.Chrome()
     url = 'https://cinepolis.com.co/cartelera/cali-colombia'
 
     driver.get(url)
@@ -167,7 +163,7 @@ def peliculas_cinepolis():
     peliculas = WebDriverWait(driver, 10).until(
         EC.presence_of_all_elements_located((By.CLASS_NAME, 'tituloPelicula'))
     )
-     
+
     for pelicula in peliculas:
         try:
             titulo = pelicula.find_element(By.CLASS_NAME, 'datalayer-movie').text.strip()
@@ -176,7 +172,8 @@ def peliculas_cinepolis():
             datos_pelicula = pelicula.find_element(By.CLASS_NAME, 'data-layer')
             generos = datos_pelicula.get_attribute('data-genero')
             director = datos_pelicula.get_attribute('data-director')
-            actores = ', '.join(datos_pelicula.get_attribute('data-actor').replace('"', '').replace('[', '').replace(']', '').split(', '))
+            actores = ', '.join(
+                datos_pelicula.get_attribute('data-actor').replace('"', '').replace('[', '').replace(']', '').split(', '))
             titulo_original = datos_pelicula.get_attribute('data-titulooriginal')
 
             funciones += f'{titulo}|'
@@ -184,18 +181,20 @@ def peliculas_cinepolis():
             funciones += f'{clasificacion}|'
             funciones += f'{generos}|'
             funciones += f'Cinepolis|'
-            funciones += f'|'   #sinopsis
-            funciones += f'{titulo_original}'
-            funciones += f'|'   #pais de origen
+            funciones += f'|'  # Sinopsis
+            funciones += f'{titulo_original}|'
+            funciones += f'|'  # País de origen
             funciones += f'{director}|'
             funciones += f'{actores}|'
-            funciones += f'|\n'   #idioma
+            funciones += f'|\n'  # Idioma
 
         except:
-            print()
+            print
 
     driver.quit()
     return funciones
+
+
 
 def funciones_cinepolis():
     funciones = ""
@@ -225,8 +224,8 @@ def funciones_cinepolis():
                 funciones += f'{horario}|'
                 funciones += f'{url}\n'    
 
-        except Exception as e:
-            print(e)
+        except:
+            print
 
     driver.quit()
     return funciones
@@ -288,8 +287,8 @@ def peliculas_cinemark():
             pelicula_format = f"{titulo}|{duracion}|{clasificacion}||Cinemark|{sinopsis}|{titulo_original}|||{actores}|\n"
             funciones += pelicula_format
 
-        except Exception as e:
-            print(e)
+        except:
+            print
 
         driver.back()
 
@@ -317,17 +316,17 @@ def funciones_cinemark():
                 formato_elements = contain.find_elements(By.CSS_SELECTOR, ".formats__item")
                 formatos = ' '.join([element.text for element in formato_elements])
                 horarios_elements = contain.find_elements(By.CLASS_NAME, "sessions__button--runtime")
-                horarios = [element.text for element in horarios_elements]
+                horarios = [element.text.replace('[', '').replace(']', '').replace('"', '') for element in horarios_elements]
+                horarios_str = ", ".join(horarios)
             
                 funciones += f'{titulo}|'
-                funciones += f'Pacific Mall|'
+                funciones += f'Cinemark Pacific Mall|'
                 funciones += f'{formatos}|'
-                funciones += f'{horarios}|'
-                funciones += f'{url}|'
-                funciones += f'\n'
+                funciones += f'{horarios_str}|'
+                funciones += f'{url}\n'
 
-        except Exception as e:
-            print(e)
+        except:
+            print
 
     return funciones
 
@@ -361,8 +360,8 @@ def peliculas_izimovie():
 
                 funciones_set.add(titulo)
 
-    except Exception as e:
-        print(f'Error: {e}')
+    except:
+        print
 
     driver.quit()
     return funciones
@@ -387,10 +386,12 @@ def funciones_izimovie():
             formato = formato_element.text.split(":")[-1].strip()
             url = pelicula.find_element(By.CLASS_NAME, 'movie__title').get_attribute('href')
 
+            horarios_str = ", ".join(horarios)
+
             funciones += f'{titulo}|'
-            funciones += f'Aquarela|'
+            funciones += f'Izimovie Aquarela|'
             funciones += f'{formato}|'    
-            funciones += f'{horarios}|'    
+            funciones += f'{horarios_str}|'    
             funciones += f'{url}\n'      
 
     except Exception as e:
@@ -429,8 +430,8 @@ def peliculas_royalfilms():
             link = pelicula.get_attribute('href')
             links_peliculas.append(link)
 
-        except Exception as e:
-            print(e)
+        except:
+            print
 
     for link in links_peliculas:
         driver.get(link)
@@ -445,6 +446,8 @@ def peliculas_royalfilms():
             clasificacion = detalles.find_element(By.XPATH, '/html/body/app-root/div[2]/app-movie/section[2]/div/div/div[2]/div/div[1]/ul[2]/li[last()]').text.strip()
             generos_element = detalles.find_elements(By.XPATH, '/html/body/app-root/div[2]/app-movie/section[2]/div/div/div[2]/div/div[1]/ul[2]/li[position() < last()]')
             generos = [genero.text.strip() for genero in generos_element]
+
+            generos_str = ', '.join(generos)
             
             try:
                 sinopsis_boton = WebDriverWait(driver, 1).until(
@@ -462,30 +465,33 @@ def peliculas_royalfilms():
             director = detalles.find_element(By.XPATH,'//*[@id="movie"]/div/div/div[2]/div/div[2]/table/tbody/tr[4]/td').text.strip()
             actores_elements = detalles.find_elements(By.XPATH, '//*[@id="movie"]/div/div/div[2]/div/div[2]/table/tbody/tr[3]/td')
             actores = [actor.text.strip() for actor in actores_elements]
+            actores_str = ', '.join(actores)
 
             if titulo not in funciones_set:
 
                 funciones += f'{titulo}|'
                 funciones += f'{duracion}|'
                 funciones +=  f'{clasificacion}|'
-                funciones += f'{generos}|'
+                funciones += f'{generos_str}|'
                 funciones += f'Royalfilms|'
                 funciones += f'{sinopsis}|'
                 funciones += f'{titulo_original}|'
                 funciones += f'{director}|'
-                funciones += f'{actores}|'
+                funciones += f'{actores_str}|'
                 funciones += f'|'
                 funciones += '\n'
 
                 funciones_set.add(titulo)
 
-        except Exception as e:
-            print(e)
+        except:
+            print
         
         driver.back()
 
     driver.quit()
     return funciones
+
+from selenium.common.exceptions import NoSuchElementException
 
 def funciones_royalfilms():
     funciones = ""
@@ -530,48 +536,52 @@ def funciones_royalfilms():
 
         try:
             titulo = driver.find_element(By.XPATH, '//*[@id="movie"]/div/div/div[2]/h2')
-            schedules = driver.find_elements(By.CLASS_NAME, 'schedules')
 
-            for schedule in schedules:
-                sala_nombres = schedule.find_elements(By.XPATH, './/li[1]/span')
-                formatos_elements = schedule.find_elements(By.XPATH, './/li[2]/span[1]')
-                horarios_elements = schedule.find_elements(By.XPATH, './/li[2]/span[position() > 1]')
+            for i in range(1, 5):  
+                ul_xpath = f'//*[@id="movie"]/div/div/div[2]/div/div[3]/div[3]/ul[{i}]'
+                
+                try:
+                    element_click = driver.find_element(By.XPATH, f'{ul_xpath}/li[1]/span')
+                    element_click.click()
+                    time.sleep(1)
 
-                sala_nombre = [sala.text.replace('\n', '') for sala in sala_nombres if sala.text.strip()]
-                formatos = [formato.text.replace('\n', '') for formato in formatos_elements if formato.text.strip()]
-                horarios = [horario.text.replace('\n', '') for horario in horarios_elements if horario.text.strip()]
+                    sala_nombre = driver.find_element(By.XPATH, f'{ul_xpath}//li[1]/span')
+                    formatos_elements = driver.find_elements(By.XPATH, f'{ul_xpath}//li[2]/span[1]')
+                    horarios_elements = driver.find_elements(By.XPATH, f'{ul_xpath}//li[2]/span/a')
 
-                formatos = [formato for formato in formatos if formato.strip() != ""]
-                horarios = [horario for horario in horarios if horario.strip() != ""]
+                    formatos = [formato.text for formato in formatos_elements]
+                    horarios = [horario.text for horario in horarios_elements]
 
-                if sala_nombre and formatos and horarios:
-                    funciones += f'{titulo.text}|'
-                    funciones += f'{sala_nombre}|'
-                    funciones += f'{formatos}|'
-                    funciones += f'{horarios}|'
-                    funciones += f'{link}\n' 
+                    for formato, horario in zip(formatos, horarios):
+                        funciones += f'{titulo.text}|'
+                        funciones += f'Royal films {sala_nombre.text.strip()}|'
+                        funciones += f'{formato}|'
+                        funciones += f'{horario}|'
+                        funciones += f'{link}\n'
 
-        except Exception as e:
-            print(e)
-        
+                except:
+                    continue
+
+        except:
+            print
+
         driver.back()
 
     driver.quit()
     return funciones
 
-
 # pelis_cinecolombia = peliculas_cinecolombia()
 # pelis_cinepolis = peliculas_cinepolis()
 # pelis_cinemark = peliculas_cinemark()
-# peliculas_izimovie = peliculas_izimovie()
+# pelis_izimovie = peliculas_izimovie()
 # pelis_royalfilms = peliculas_royalfilms()
 
 # with open("./python/peliculas.txt","w", encoding="UTF-8") as archivo:
-#     archivo.write(pelis_cinecolombia)
-#     archivo.write(pelis_cinepolis)
-#     archivo.write(pelis_cinemark)
-    # archivo.write(peliculas_izimovie)
-    # archivo.write(pelis_royalfilms)
+# #     archivo.write(pelis_cinecolombia)
+# #     archivo.write(pelis_cinepolis)
+# #     archivo.write(pelis_cinemark)
+# #     archivo.write(pelis_izimovie)
+#     archivo.write(pelis_royalfilms)
 
 # func_cinecolombia = funciones_cinecolombia()
 # func_cinepolis = funciones_cinepolis()
@@ -583,5 +593,11 @@ def funciones_royalfilms():
 #     archivo.write(func_cinecolombia)
 #     archivo.write(func_cinepolis)
 #     archivo.write(func_cinemark)
-    # archivo.write(func_izimovie)
-    # archivo.write(func_royalfilms)
+#     archivo.write(func_izimovie)
+#     archivo.write(func_royalfilms)
+
+
+
+
+
+
