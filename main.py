@@ -104,15 +104,19 @@ def funciones_cinecolombia():
     url = 'https://www.cinecolombia.com/cali/cartelera'
     driver = webdriver.Chrome()
     driver.get(url)
+    links = []
 
     peliculas = WebDriverWait(driver, 10).until(
         EC.presence_of_all_elements_located((By.CLASS_NAME, 'movie-item'))
     )
 
     for pelicula in peliculas:
+        link_pelicula = pelicula.get_attribute('href')
+        links.append(link_pelicula)
+
+    for link in links:
         try:
-            enlace_pelicula = pelicula.get_attribute('href')
-            driver.get(enlace_pelicula)
+            driver.get(link)
 
             titulo = driver.find_element(By.CLASS_NAME, 'ezstring-field').text
 
@@ -142,16 +146,15 @@ def funciones_cinecolombia():
                     funciones += f'CineColombia {sala_nombre}|'
                     funciones += f'{formato}|'
                     funciones += f'{horario}|'
-                    funciones += f'{enlace_pelicula}\n'
+                    funciones += f'{link}\n'
 
         except:
-            print
+            continue
 
-        driver.back()
+        driver.get(url)
 
     driver.quit()
     return funciones
-
 
 def peliculas_cinepolis():
     funciones = ""
@@ -194,8 +197,6 @@ def peliculas_cinepolis():
     driver.quit()
     return funciones
 
-
-
 def funciones_cinepolis():
     funciones = ""
     driver = webdriver.Chrome()  
@@ -219,7 +220,7 @@ def funciones_cinepolis():
             for formato, horario in zip(formato_text, horarios_text):
 
                 funciones += f'{titulo}|'
-                funciones += f'Limonar|'
+                funciones += f'Cinepolis Limonar|'
                 funciones += f'{formato}|'
                 funciones += f'{horario}|'
                 funciones += f'{url}\n'    
@@ -491,15 +492,15 @@ def peliculas_royalfilms():
     driver.quit()
     return funciones
 
-from selenium.common.exceptions import NoSuchElementException
-
 def funciones_royalfilms():
     funciones = ""
     links_peliculas = []
 
     driver = webdriver.Chrome()
 
-    driver.get('https://royal-films.com/cartelera/cali')
+    url = 'https://royal-films.com/cartelera/cali'
+
+    driver.get(url)
 
     while True:
         try:
@@ -545,27 +546,35 @@ def funciones_royalfilms():
                     element_click.click()
                     time.sleep(1)
 
-                    sala_nombre = driver.find_element(By.XPATH, f'{ul_xpath}//li[1]/span')
-                    formatos_elements = driver.find_elements(By.XPATH, f'{ul_xpath}//li[2]/span[1]')
-                    horarios_elements = driver.find_elements(By.XPATH, f'{ul_xpath}//li[2]/span/a')
+                except:
+                    continue
 
-                    formatos = [formato.text for formato in formatos_elements]
-                    horarios = [horario.text for horario in horarios_elements]
+                try:
+                    sala_nombre = driver.find_element(By.XPATH, f'{ul_xpath}//li[1]/span').text.strip()
 
-                    for formato, horario in zip(formatos, horarios):
+                    formatos_horarios = WebDriverWait(driver, 10).until(
+                        EC.presence_of_all_elements_located((By.XPATH, f'{ul_xpath}//li[@class="row"]'))
+                    )
+
+                    for data in formatos_horarios:
+                        formato = data.find_element(By.XPATH, 'span[1]').text
+                        horarios_elements = data.find_elements(By.XPATH, 'span[2]/a')
+
+                        horarios = [horario.text for horario in horarios_elements]
+                        horarios_str = ', '.join(horarios)
+
                         funciones += f'{titulo.text}|'
-                        funciones += f'Royal films {sala_nombre.text.strip()}|'
+                        funciones += f'Royal films {sala_nombre}|'
                         funciones += f'{formato}|'
-                        funciones += f'{horario}|'
+                        funciones += f'{horarios_str}|'
                         funciones += f'{link}\n'
-
                 except:
                     continue
 
         except:
-            print
+            continue
 
-        driver.back()
+        driver.get(url)
 
     driver.quit()
     return funciones
@@ -589,12 +598,12 @@ def funciones_royalfilms():
 # func_izimovie = funciones_izimovie()
 # func_royalfilms = funciones_royalfilms()
 
-# with open('./python/funciones.txt', 'w', encoding='UTF-8') as archivo:
-#     archivo.write(func_cinecolombia)
-#     archivo.write(func_cinepolis)
-#     archivo.write(func_cinemark)
-#     archivo.write(func_izimovie)
-#     archivo.write(func_royalfilms)
+# with open('./python/funciones2.txt', 'w', encoding='UTF-8') as archivo:
+    # archivo.write(func_cinecolombia)
+    # archivo.write(func_cinepolis)
+    # archivo.write(func_cinemark)
+    # archivo.write(func_izimovie)
+    # archivo.write(func_royalfilms)
 
 
 
