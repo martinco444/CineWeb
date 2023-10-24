@@ -1,1 +1,265 @@
+*{
+    margin: 0;
+    box-sizing: border-box;
+}
 
+:root{
+    scroll-behavior: smooth;
+    --red: #a4161a;
+    --background: #F0F9FE
+}
+
+body{
+    font-family: 'Archivo', sans-serif;
+    background-color: #141414;
+    color: #fff;
+}
+
+.container{
+    width: 90%;
+    max-width: 1200px;
+    margin: 0 auto;
+    overflow: hidden;
+    padding: 80px 0;
+}
+
+.container--hero{
+    padding: 40px 0;
+}
+
+.nav__container{
+    width: 100%;
+    background: linear-gradient(to top, #141414, #000000);
+    position: fixed;
+}
+
+.nav{
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.nav__menu{
+    width: 35px;
+    cursor: pointer;
+    z-index: 100;
+}
+
+.nav__list{
+    display: grid;
+    position: fixed;
+    list-style: none;
+    bottom:0;
+    top:0;
+    left:0;
+    right: 0;
+    background-color: rgba(164, 22, 26, 0.97); 
+    gap: 5rem;
+    padding: 80px 0;
+    place-content: center;
+    text-align: center; 
+    transform: translate(-100%);
+    transition: transform .3s;
+}
+
+.nav__list--show{
+    transform: translate(0);
+}
+
+.nav__link{
+    text-decoration: none;
+    color: #fff;
+    font-weight: 500;
+    font-size: 2rem;
+}
+
+.nav__logo{
+    max-width: 180px;
+    
+}
+
+.nav__logo--link{
+    text-decoration: none;
+    font-size: 2rem;
+    color: #9F161A;
+}
+
+/* hero-main */
+
+.hero__main{
+    padding-top: 100px;
+    display: flex;
+    flex-direction: column;
+    gap:40px
+}
+
+.hero__figure{
+    order: -1;
+    padding: 20px;
+}
+
+.hero__img{
+    display: block;
+    max-width: 100%;
+    margin: 0 auto;
+    border-radius: 12px;
+    border: 2px solid; 
+    border-color: #800e13;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.6);
+}
+
+.hero__texts{
+    display: grid;
+    gap: 1.5rem;
+    text-align: center;
+    padding-bottom:  70px; 
+}
+
+.hero__title{
+    font-size: 3rem;
+}
+
+.hero__paragraph{
+    line-height: 1.5;
+    font-weight: 280;
+    margin-bottom: .5rem;
+}
+
+/* movies */
+
+.main{
+    width: 100%;
+}
+
+.movies__container{
+    margin: 0 auto;
+    background-color: #121212;
+    width: 90%;
+    border-radius: 12px;
+}
+
+.movies__texts{
+    width: 90%;
+    max-width: 1200px;
+    margin: 0 auto;
+    overflow: hidden;
+    text-align: center;
+    padding-bottom:  70px; 
+}
+
+.movie__title{
+    font-size: 2.2rem;
+    padding-bottom: 40px;
+} 
+
+.movie__list {
+    display: grid;  
+    padding: 0;
+    grid-template-columns: repeat(auto-fill, minmax(235px, 1fr));
+    gap: 50px 0; 
+    /* margin-bottom: 20px; */
+    list-style: none;
+}
+
+.movie__items{
+    font-size: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.movie__texts{
+    margin-top: 20px;
+}
+
+.movie__figure{
+    height: 345px;
+    width: 230px;
+}
+
+.movie__img{
+    object-fit: cover;
+    width: 100%;
+    height: 100%;
+    border-radius: 12px;
+}
+
+/* footer */
+
+.footer{
+    width: 100%;
+    color: #fff; 
+    text-align: center; 
+    padding: 10px;
+}
+
+/* media querys */
+
+@media (min-width: 850px) {
+
+    .container{
+        max-width: 90%;
+    }
+    
+    .nav__menu{
+        display: none;
+    }
+    
+    .nav__list{
+        position: static;
+        background-color: transparent;
+        padding: 0;
+        display: flex;
+        gap: 2rem;
+        list-style: none;
+        transform: unset;
+        transition: none;
+    }
+    
+    .nav__list--show{
+        transform: unset;
+    }
+    
+    .nav__link{
+        text-decoration: none;
+        color: #fff;
+        font-weight: 500;
+        font-size: 1.4rem;
+    }
+    
+    /* hero-main */
+    
+    .hero__main{
+        min-height: 500px;
+        gap: 40px;
+        align-items: center;
+    } */
+    
+    .hero__figure{
+        order: 0;
+        padding: 0;
+    } 
+    
+    .hero__img{
+        max-width: 100%;
+    }
+    
+    /* .hero__texts{
+        width: 54%;
+        text-align: start;
+        display: grid;
+        gap: 2rem;
+        padding-bottom:  0; 
+    } */
+    
+    /* .hero__title{
+        font-size: 3rem;
+    }
+    
+    .hero__paragraph{
+        line-height: 1.5;
+        font-weight: 300;
+        margin-bottom: 0;
+    } */
+}
