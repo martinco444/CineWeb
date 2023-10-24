@@ -28,6 +28,8 @@ def peliculas_cinecolombia():
             titulo = pelicula.find('h2', class_='movie-item__title').text.strip()
             metas = pelicula.find_all('span', class_='movie-item__meta')
             tags = pelicula.find_all('span', class_='tag')
+            img_tag = pelicula.find('img')
+            img = img_tag.get('data-src')
             
             generos = []
             duracion = ""
@@ -86,12 +88,13 @@ def peliculas_cinecolombia():
                 funciones += (f'{clasificacion}|')
                 funciones += (f'{", ".join(generos)}|')
                 funciones += "CineColombia|"
-                funciones += f'{sinopsis}|'
                 funciones += f'{titulo_original}|'
                 funciones += f'{pais_origen}|'
                 funciones += f'{director}|'
                 funciones += f'{actores}|'
-                funciones += f'{idioma}\n'
+                funciones += f'{idioma}|'
+                funciones += f'{img}|'
+                funciones += f'{sinopsis}\n'
 
                 funciones_set.add(titulo)
     else:
@@ -183,18 +186,20 @@ def peliculas_cinepolis():
             actores = ', '.join(
                 datos_pelicula.get_attribute('data-actor').replace('"', '').replace('[', '').replace(']', '').split(', '))
             titulo_original = datos_pelicula.get_attribute('data-titulooriginal')
+            img = pelicula.find_element(By.TAG_NAME, 'img').get_attribute('src')
 
             funciones += f'{titulo}|'
             funciones += f'{duracion}|'
             funciones += f'{clasificacion}|'
             funciones += f'{generos}|'
             funciones += f'Cinepolis|'
-            funciones += f'|'  # Sinopsis
             funciones += f'{titulo_original}|'
             funciones += f'|'  # País de origen
             funciones += f'{director}|'
             funciones += f'{actores}|'
-            funciones += f'|\n'  # Idioma
+            funciones += f'|'  # Idioma
+            funciones += f'{img}|'
+            funciones += f'|\n'  # Sinopsis
 
         except: continue
 
@@ -254,8 +259,8 @@ def peliculas_cinemark():
         EC.presence_of_all_elements_located((By.CLASS_NAME, 'section-detail__information-badge'))
     )
 
-    peliculas_info = []  # Lista para almacenar información de cada película
-    enlaces_procesados = set()  # Conjunto para realizar un seguimiento de los enlaces procesados
+    peliculas_info = []  
+    enlaces_procesados = set() 
 
     for pelicula in peliculas:
         try:
@@ -288,6 +293,7 @@ def peliculas_cinemark():
             time.sleep(3)
             titulo_original = driver.find_element(By.XPATH, "//h4[text()='título original']/following-sibling::p").text
             actores = driver.find_element(By.XPATH, "//h4[text()='reparto']/following-sibling::p").text
+            img = driver.find_element(By.XPATH, '//*[@id="__next"]/div[2]/div[2]/div[1]/div[3]/div/div[1]/div/img').get_attribute('src')
 
             try:
                 sinopsis_boton = WebDriverWait(driver, 1).until(
@@ -301,7 +307,7 @@ def peliculas_cinemark():
             except:
                 sinopsis = driver.find_element(By.XPATH, '//*[@id="__next"]/div[2]/div[2]/div[1]/div[3]/div/p[3]/span[1]').text.strip()
 
-            pelicula_format = f"{titulo}|{duracion}|{clasificacion}||Cinemark|{sinopsis}|{titulo_original}|||{actores}|\n"
+            pelicula_format = f"{titulo}|{duracion}|{clasificacion}||Cinemark|{titulo_original}|||{actores}||{img}|{sinopsis}\n"
             funciones += pelicula_format
 
         except: continue
@@ -367,22 +373,24 @@ def peliculas_izimovie():
             duracion = pelicula.find_element(By.CLASS_NAME, 'movie__time').text.strip()
             clasificacion = pelicula.find_element(By.XPATH, ".//span[@class='icon-childcare']/following-sibling::p").text
             generos = pelicula.find_element(By.XPATH, ".//span[@class='icon-theaters']/following-sibling::p").text
+            img = pelicula.find_element(By.CLASS_NAME, 'movie-beta__link').find_element(By.TAG_NAME, 'img').get_attribute('src')
             link = pelicula.find_element(By.CLASS_NAME, 'movie__title').get_attribute('href')
+            
             links.append(link)
 
             if titulo not in funciones_set:
-                peliculas_info.append((titulo,duracion,clasificacion, generos, link))
+                peliculas_info.append((titulo,duracion,clasificacion, generos, img, link))
                 funciones_set.add(titulo)
 
         except: continue
 
-    for titulo, duracion, clasificacion, generos, link in peliculas_info:
+    for titulo, duracion, clasificacion, generos, img, link in peliculas_info:
         try:
             driver.get(link)
             time.sleep(3)
             sinopsis = driver.find_element(By.ID, 'pelicula_sinopsis').text
 
-            pelicula_format = f"{titulo}|{duracion}|{clasificacion}|{generos}|Izimovie|{sinopsis}|||||\n"
+            pelicula_format = f"{titulo}|{duracion}|{clasificacion}|{generos}|Izimovie||||||{img}|{sinopsis}\n"
             funciones += pelicula_format
 
             driver.get(url)
@@ -495,6 +503,11 @@ def peliculas_royalfilms():
             actores_elements = detalles.find_elements(By.XPATH, '//*[@id="movie"]/div/div/div[2]/div/div[2]/table/tbody/tr[3]/td')
             actores = [actor.text.strip() for actor in actores_elements]
             actores_str = ', '.join(actores)
+            img_element = driver.find_element(By.XPATH, '//*[@id="movie"]/div/div/div[1]/div/span').get_attribute('style')
+
+            start_index = img_element.find('url("') + len('url("')
+            end_index = img_element.find('")', start_index)
+            img = img_element[start_index:end_index]
 
             if titulo not in funciones_set:
 
@@ -503,12 +516,13 @@ def peliculas_royalfilms():
                 funciones +=  f'{clasificacion}|'
                 funciones += f'{generos_str}|'
                 funciones += f'Royalfilms|'
-                funciones += f'{sinopsis}|'
                 funciones += f'{titulo_original}|'
+                funciones += f'|'
                 funciones += f'{director}|'
                 funciones += f'{actores_str}|'
                 funciones += f'|'
-                funciones += '\n'
+                funciones += f'{img}|'
+                funciones += f'{sinopsis}\n'
 
                 funciones_set.add(titulo)
 
@@ -607,18 +621,18 @@ def funciones_royalfilms():
     driver.quit()
     return funciones
 
-# pelis_cinecolombia = peliculas_cinecolombia()
-# pelis_cinepolis = peliculas_cinepolis()
-# pelis_cinemark = peliculas_cinemark()
-# pelis_izimovie = peliculas_izimovie()
-# pelis_royalfilms = peliculas_royalfilms()
+pelis_cinecolombia = peliculas_cinecolombia()
+pelis_cinepolis = peliculas_cinepolis()
+pelis_cinemark = peliculas_cinemark()
+pelis_izimovie = peliculas_izimovie()
+pelis_royalfilms = peliculas_royalfilms()
 
-# with open("./python/peliculas.txt","w", encoding="UTF-8") as archivo:
-#     archivo.write(pelis_cinecolombia)
-#     archivo.write(pelis_cinepolis)
-#     archivo.write(pelis_cinemark)
-#     archivo.write(pelis_izimovie)
-#     archivo.write(pelis_royalfilms)
+with open("./python/peliculas.txt","w", encoding="UTF-8") as archivo:
+    archivo.write(pelis_cinecolombia)
+    archivo.write(pelis_cinepolis)
+    archivo.write(pelis_cinemark)
+    archivo.write(pelis_izimovie.strip())
+    archivo.write(pelis_royalfilms.strip())
 
 # func_cinecolombia = funciones_cinecolombia()
 # func_cinepolis = funciones_cinepolis()
