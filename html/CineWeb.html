@@ -1,16 +1,142 @@
 <!doctype html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport"
-        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<meta charset="UTF-8">
+	<meta name="viewport"
+		content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
 
-  <link rel="stylesheet" type="text/css" href="../css/DesignCineWeb.css">
-
-  <title>CineWeb</title>
+	<link rel="stylesheet" type="text/css" href="../css/DesignCineWeb.css">
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@300;400;500;700&display=swap" rel="stylesheet">
+  	<title>CineWeb</title>
 </head>
+
 <body>
 
+	<header class="hero">
+		<div class="nav__container">
+			<nav class="nav container container--hero">
+
+				<a href="#container--hero" class="nav__link">
+					<!-- <img src="/img/Logo3.svg" alt="logo" class="nav__logo"> -->
+					<h2 class="nav__logo--link ">CineWeb</h2>
+				</a>
+				
+
+				<ul class="nav__list">
+					<li class="nav__item">
+						<a href="#movies__cinecolombia" class="nav__link">Cinecolombia</a>
+					</li>
+					<li class="nav__item">
+						<a href="#movies__cinepolis" class="nav__link">Cinepolis</a>
+					</li>
+					<li class="nav__item">
+						<a href="#movies__cinemark" class="nav__link">Cinemark</a>
+					</li>
+					<li class="nav__item">
+						<a href="#movies__izimovie" class="nav__link">Izimovie</a>
+					</li>
+					<li class="nav__item">
+						<a href="#movies__royalfilms" class="nav__link">Royalfilms</a>
+					</li>
+				</ul>
+
+				<img src="/img/menu.svg" alt="" class="nav__menu">
+
+			</nav>
+		</div>
+
+		<section class="hero__main container container--hero">
+			<!-- <article class="hero__texts">
+
+				<h1 class="hero__title">Bienvenido a CineWeb</h1>
+				<p class="hero__paragraph">Aquí podrás encontrar todas 
+				ls películas y funciones de la ciudad en un solo lugar,
+				consultar sus detalles, características y mucho más!
+				</p>
+
+			</article> -->
+
+			<figure class="hero__figure">
+				<img src="/img/banner.svg" alt="" class="hero__img">
+			</figure>
+
+		</section>
+
+	</header>
+
+	<main class="main">
+
+		<!-- <section class="movies movies__container">
+			<article class="movies__texts">
+
+				<h2 class="movie__title">Peliculas</h2>
+				<ul class="movie__list">
+
+				</ul>
+			</article>
+		</section> -->
+
+		<section class="movies__cinecolombia movies__container ">
+			<article class="movies__texts">
+
+				<h2 class="movie__title">Cinecolombia</h2>
+				<ul class="movie__list">
+					<!-- peliculas cargadas con js -->
+				</ul>
+			</article>
+		</section>
+
+		<section class="movies__cinepolis movies__container ">
+			<article class="movies__texts">
+
+				<h2 class="movie__title">Cinepolis</h2>
+				<ul class="movie__list">
+					<!-- peliculas cargadas con js -->
+				</ul>
+			</article>
+		</section>
+
+		<section class="movies__cinemark movies__container ">
+			<article class="movies__texts">
+
+				<h2 class="movie__title">Cinemark</h2>
+				<ul class="movie__list">
+					<!-- peliculas cargadas con js -->
+				</ul>
+			</article>
+		</section>
+
+		<section class="movies__izimovie movies__container ">
+			<article class="movies__texts">
+
+				<h2 class="movie__title">Izimovie</h2>
+				<ul class="movie__list">
+					<!-- peliculas cargadas con js -->
+				</ul>
+			</article>
+		</section>
+
+		<section class="movies__royalfilms movies__container ">
+			<article class="movies__texts">
+
+				<h2 class="movie__title">Royalfilms</h2>
+				<ul class="movie__list">
+					<!-- peliculas cargadas con js -->
+				</ul>
+			</article>
+		</section>
+
+	</main>
+
+	<footer class="footer">
+    	<p>&copy; CineWeb</p>
+	</footer>
+
+	<script src="/js/app.js"></script>
 </body>
+
 </html>
