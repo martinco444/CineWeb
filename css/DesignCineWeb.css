@@ -3,6 +3,28 @@
     box-sizing: border-box;
 }
 
+.genre-menu {
+    text-align: left;
+   display: flex;
+    flex-direction: column;
+}
+
+/* Estiliza el menú desplegable */
+#genre-select {
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #fff;
+    
+}
+
+/* Estilo para opciones seleccionadas */
+#genre-select option:checked {
+    background-color: #121212;
+    color: #fff;
+}
+
 :root{
     scroll-behavior: smooth;
     --red: #a4161a;
