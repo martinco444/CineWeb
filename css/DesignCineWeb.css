@@ -7,6 +7,7 @@
     text-align: left;
    display: flex;
     flex-direction: column;
+    position: static;
 }
 
 /* Estiliza el menú desplegable */
@@ -16,7 +17,8 @@
     border: 1px solid #ccc;
     border-radius: 5px;
     background-color: #fff;
-    
+    margin-left: 6cap;
+    margin-right: 6cap;
 }
 
 /* Estilo para opciones seleccionadas */

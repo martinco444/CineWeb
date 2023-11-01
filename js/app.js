@@ -231,3 +231,17 @@ function initialize() {
 }
 
 window.onload = initialize;
+
+//Funcionalidad menu seleccion genero
+document.getElementById("genre-menu").addEventListener("change", function() {
+    var selectedGenero = this.value;
+  
+    var peliculas = document.querySelectorAll(".pelicula");
+    peliculas.forEach(function(pelicula) {
+      if (selectedGenero === "todos" || pelicula.classList.contains(selectedGenero)) {
+        pelicula.style.display = "block";
+      } else {
+        pelicula.style.display = "none";
+      }
+    });
+  });

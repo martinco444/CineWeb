@@ -627,7 +627,7 @@ pelis_cinemark = peliculas_cinemark()
 pelis_izimovie = peliculas_izimovie()
 pelis_royalfilms = peliculas_royalfilms()
 
-with open("./python/peliculas.txt","w", encoding="UTF-8") as archivo:
+with open("./peliculas_data/peliculas.txt","w", encoding="UTF-8") as archivo:
     archivo.write(pelis_cinecolombia)
     archivo.write(pelis_cinepolis)
     archivo.write(pelis_cinemark)
@@ -640,7 +640,7 @@ with open("./python/peliculas.txt","w", encoding="UTF-8") as archivo:
 # func_izimovie = funciones_izimovie()
 # func_royalfilms = funciones_royalfilms()
 
-# with open('./python/funciones2.txt', 'w', encoding='UTF-8') as archivo:
+# with open('./peliculas_data/funciones2.txt', 'w', encoding='UTF-8') as archivo:
     # archivo.write(func_cinecolombia)
     # archivo.write(func_cinepolis)
     # archivo.write(func_cinemark)
