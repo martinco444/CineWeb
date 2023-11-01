@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="es">
+<html lang="en">
 
 <head>
 	<meta charset="UTF-8">
@@ -11,7 +11,7 @@
 	<link rel="preconnect" href="https://fonts.googleapis.com">
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 	<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@300;400;500;700&display=swap" rel="stylesheet">
-  	<title>CineWeb</title>
+	<title>CineWeb</title>
 </head>
 
 <body>
@@ -24,23 +24,27 @@
 					<!-- <img src="/img/Logo3.svg" alt="logo" class="nav__logo"> -->
 					<h2 class="nav__logo--link ">CineWeb</h2>
 				</a>
-				
 
 				<ul class="nav__list">
 					<li class="nav__item">
-						<a href="#movies__cinecolombia" class="nav__link">Cinecolombia</a>
+						<a class="nav__link">Buscador</a>
 					</li>
-					<li class="nav__item">
-						<a href="#movies__cinepolis" class="nav__link">Cinepolis</a>
+					<li class="nav__item submenu">
+						<div class="nav__item--container">
+							<a class="nav__link" id="cines">Cines</a>
+							<img src="/img/arrow_drop_down_FILL0_wght400_GRAD0_opsz24.svg" alt="flecha">
+						</div>
+						<ul class="submenu__content ">
+							<li class="nav__item"><a href="#movies__cinecolombia" class="cinema__link">Cinecolombia</a></li>
+							<li class="nav__item"><a href="#movies__cinepolis" class="cinema__link">Cinepolis</a></li>
+							<li class="nav__item"><a href="#movies__cinemark" class="cinema__link">Cineamrk</a></li>
+							<li class="nav__item"><a href="#movies__izimovie" class="cinema__link">Izimovie</a></li>
+							<li class="nav__item"><a href="#movies__royalfilms" class="cinema__link">Royalfilms</a></li>
+						</ul>
 					</li>
+
 					<li class="nav__item">
-						<a href="#movies__cinemark" class="nav__link">Cinemark</a>
-					</li>
-					<li class="nav__item">
-						<a href="#movies__izimovie" class="nav__link">Izimovie</a>
-					</li>
-					<li class="nav__item">
-						<a href="#movies__royalfilms" class="nav__link">Royalfilms</a>
+						<a href="#" class="nav__link">Cuenta</a>
 					</li>
 				</ul>
 
@@ -68,15 +72,6 @@
 
 	</header>
 
-	<div class="genre-menu">
-		<select id="genre-select">
-			<option value="accion">Acción</option>
-			<option value="comedia">Comedia</option>
-			<option value="drama">Drama</option>
-			<option value="ciencia-ficcion">Ciencia Ficción</option>
-			<option value="aventura">Aventura</option>
-		</select>
-
 	<main class="main">
 
 		<!-- <section class="movies movies__container">
@@ -89,7 +84,7 @@
 			</article>
 		</section> -->
 
-		<section class="movies__cinecolombia movies__container ">
+		<section class="movies__cinecolombia movies__container">
 			<article class="movies__texts">
 
 				<h2 class="movie__title">Cinecolombia</h2>
@@ -99,7 +94,7 @@
 			</article>
 		</section>
 
-		<section class="movies__cinepolis movies__container ">
+		<section class="movies__cinepolis movies__container">
 			<article class="movies__texts">
 
 				<h2 class="movie__title">Cinepolis</h2>
@@ -109,7 +104,7 @@
 			</article>
 		</section>
 
-		<section class="movies__cinemark movies__container ">
+		<section class="movies__cinemark movies__container">
 			<article class="movies__texts">
 
 				<h2 class="movie__title">Cinemark</h2>
@@ -119,7 +114,7 @@
 			</article>
 		</section>
 
-		<section class="movies__izimovie movies__container ">
+		<section class="movies__izimovie movies__container">
 			<article class="movies__texts">
 
 				<h2 class="movie__title">Izimovie</h2>
@@ -129,7 +124,7 @@
 			</article>
 		</section>
 
-		<section class="movies__royalfilms movies__container ">
+		<section class="movies__royalfilms movies__container">
 			<article class="movies__texts">
 
 				<h2 class="movie__title">Royalfilms</h2>
@@ -142,7 +137,7 @@
 	</main>
 
 	<footer class="footer">
-    	<p>&copy; CineWeb</p>
+		<p>&copy; CineWeb</p>
 	</footer>
 
 	<script src="/js/app.js"></script>
