@@ -13,7 +13,7 @@ links.forEach(function (link) {
 });
 
 //Desplazamiento del nav
-const navLinks = document.querySelectorAll('.nav__link');
+const navLinks = document.querySelectorAll('.cinema__link');
 
 navLinks.forEach(link => {
     link.addEventListener('click', function (event) {
@@ -38,7 +38,7 @@ navLinks.forEach(link => {
 
 //Cargar peliculas
 function loadMovies() {
-    return fetch('/python/peliculas.txt') 
+    return fetch('/peliculas_data/peliculas.txt') 
         .then(response => response.text())
         .then(data => {
             const movieList = data.split('\n');
@@ -52,7 +52,7 @@ function loadMovies() {
 
 //Cargar funciones
 function loadFunctions() {
-    return fetch('/python/funciones.txt') // Devolver la promesa resultante
+    return fetch('/peliculas_data/funciones.txt') // Devolver la promesa resultante
         .then(response => response.text())
         .then(data => {
             const movieList = data.split('\n');
@@ -75,7 +75,9 @@ function showMovies(movies) {
         const movieItem = document.createElement('li');
         movieItem.classList.add('movie__items');
         movieItem.innerHTML = 
-        `<figure class='movie__figure'>
+        `
+        <figure class='movie__figure'>
+            <a href='#' class='movie__link'></a>
             <img class= 'movie__img' src= '${img}'> 
             </img>
         </figure>
@@ -83,7 +85,8 @@ function showMovies(movies) {
         <div class='movie__texts'>
             <strong>${title}</strong>
             <p>${cinemaName}</p>
-        </div>`;
+        </div>
+        `;
         movieListElement.appendChild(movieItem);
     });
 }
@@ -102,8 +105,10 @@ function showCinecolombiaMovies(movies){
             movieItem.classList.add('movie__items');
             movieItem.innerHTML = `
                 <figure class='movie__figure'>
-                    <img class= 'movie__img' src= '${img}'> 
-                    </img>
+                    <a href='${title}' class='movie__link'>
+                        <img class= 'movie__img' src= '${img}'> 
+                        </img>
+                    </a>
                 </figure>
                 <div class='movie__texts'>
                     <strong>${title}</strong>
@@ -231,17 +236,3 @@ function initialize() {
 }
 
 window.onload = initialize;
-
-//Funcionalidad menu seleccion genero
-document.getElementById("genre-menu").addEventListener("change", function() {
-    var selectedGenero = this.value;
-  
-    var peliculas = document.querySelectorAll(".pelicula");
-    peliculas.forEach(function(pelicula) {
-      if (selectedGenero === "todos" || pelicula.classList.contains(selectedGenero)) {
-        pelicula.style.display = "block";
-      } else {
-        pelicula.style.display = "none";
-      }
-    });
-  });
