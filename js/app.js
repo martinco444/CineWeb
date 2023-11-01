@@ -236,3 +236,18 @@ function initialize() {
 }
 
 window.onload = initialize;
+
+
+//Funcionalidad del menu de seleccion
+document.getElementById("genre-select").addEventListener("change", function() {
+    var selectedGenero = this.value;
+  
+    var peliculas = document.querySelectorAll("../peliculas_data/peliculas.txt");
+    peliculas.forEach(function(peliculas_data) {
+      if (selectedGenero === "todos" || pelicula.classList.contains(selectedGenero)) {
+        pelicula.style.display = "block";
+      } else {
+        pelicula.style.display = "none";
+      }
+    });
+  });
