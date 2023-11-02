@@ -13,20 +13,20 @@ links.forEach(function (link) {
 });
 
 //Desplazamiento del nav
-const navLinks = document.querySelectorAll('.cinema__link');
+const navLinks = document.querySelectorAll('.nav__link');
 
 navLinks.forEach(link => {
     link.addEventListener('click', function (event) {
         event.preventDefault();
 
-        const targetClass = this.getAttribute('href').substring(1); 
+        const targetClass = this.getAttribute('href').substring(1);
 
         const targetElement = document.querySelector(`.${targetClass}`);
 
         if (targetElement) {
-            const headerHeight = 110; 
+            const headerHeight = 110;
 
-            const scrollToPosition = targetElement.offsetTop - headerHeight ;
+            const scrollToPosition = targetElement.offsetTop - headerHeight;
 
             window.scrollTo({
                 top: scrollToPosition,
@@ -38,7 +38,7 @@ navLinks.forEach(link => {
 
 //Cargar peliculas
 function loadMovies() {
-    return fetch('/peliculas_data/peliculas.txt') 
+    return fetch('/peliculas_data/peliculas.txt')
         .then(response => response.text())
         .then(data => {
             const movieList = data.split('\n');
@@ -64,160 +64,50 @@ function loadFunctions() {
         });
 }
 
-//peliculas
-function showMovies(movies) {
-    const movieListElement = document.getElementsByClassName('movie__list')[0];
+function normalizeTitle(title) {
+    // Usa el método normalize para convertir a la forma normalizada (NFC)
+    return title.normalize("NFC").toLowerCase();
+}
 
-    movies.forEach(movieData => {
-        const [title, length, classification, genres, cinemaName, originalTitle,
-        originCountry, director, actors, lenguage, img, synopsis] = movieData;
+// Función para crear elementos de película y agregar eventos de clic
+function createMovieElements(movieData) {
+    const [title, length, classification, genres, cinemaName, originalTitle,
+         originCountry, director, actors, lenguage, img, synopsis] = movieData;
 
-        const movieItem = document.createElement('li');
-        movieItem.classList.add('movie__items');
-        movieItem.innerHTML = 
-        `
+    const movieItem = document.createElement('li');
+    movieItem.classList.add('movie__items');
+    movieItem.innerHTML = `
         <figure class='movie__figure'>
-            <a href='#' class='movie__link'></a>
-            <img class= 'movie__img' src= '${img}'> 
-            </img>
+            <img class='movie__img' src='${img}' data-title='${title}' data-cinema='${cinemaName}'></img>
         </figure>
-
         <div class='movie__texts'>
-            <strong>${title}</strong>
-            <p>${cinemaName}</p>
-        </div>
-        `;
-        movieListElement.appendChild(movieItem);
-    });
-}
+            <h3 class='movie__title'>${title}</h3>
+            <h4 class='movie__cinema'>${cinemaName}</p>
+        </div>`;
 
-//Peliculas Cinecolombia
-function showCinecolombiaMovies(movies){
-    const cinemaContainer = document.querySelector('.movies__cinecolombia');
-    const movieListElement = cinemaContainer.querySelector('.movie__list');
+    // Agregar evento de clic a la imagen
+    movieItem.querySelector('.movie__img').addEventListener('click', (event) => {
+        // Encuentra el título de la película a partir de la clase "movie__title"
+        const titleElement = event.currentTarget.closest('.movie__items').querySelector('.movie__title');
+        const title = titleElement.textContent;
 
-    movies.forEach(movieData => {
-        const [title, length, classification, genres, cinemaName, originalTitle,
-        originCountry, director, actors, lenguage, img, synopsis] = movieData;
-        
-        if (cinemaName === "CineColombia") {
-            const movieItem = document.createElement('li');
-            movieItem.classList.add('movie__items');
-            movieItem.innerHTML = `
-                <figure class='movie__figure'>
-                    <a href='${title}' class='movie__link'>
-                        <img class= 'movie__img' src= '${img}'> 
-                        </img>
-                    </a>
-                </figure>
-                <div class='movie__texts'>
-                    <strong>${title}</strong>
-                    <p>${cinemaName}</p>
-                </div>`;
-            movieListElement.appendChild(movieItem);
+        if(title && cinemaName){
+            // Redirige a la página de detalles con el título de la película
+            window.location.href = `/html/movie-details.html?title=${encodeURIComponent(title)}`;
         }
-    });
+    });    
+
+    return movieItem;
 }
 
-//Peliculas Cinepolis
-function showCinepolisMovies(movies){
-    const cinemaContainer = document.querySelector('.movies__cinepolis');
+// Función para mostrar películas para un cine específico
+function showMoviesForCinema(movies, cinemaName, containerSelector) {
+    const cinemaContainer = document.querySelector(containerSelector);
     const movieListElement = cinemaContainer.querySelector('.movie__list');
 
     movies.forEach(movieData => {
-        const [title, length, classification, genres, cinemaName, originalTitle,
-        originCountry, director, actors, lenguage, img, synopsis] = movieData;
-        
-        if (cinemaName === "Cinepolis") {
-            const movieItem = document.createElement('li');
-            movieItem.classList.add('movie__items');
-            movieItem.innerHTML = `
-                <figure class='movie__figure'>
-                    <img class= 'movie__img' src= '${img}'> 
-                    </img>
-                </figure>
-                <div class='movie__texts'>
-                    <strong>${title}</strong>
-                    <p>${cinemaName}</p>
-                </div>`;
-            movieListElement.appendChild(movieItem);
-        }
-    });
-}
-
-//Peliculas Cinemark
-function showCinemarkMovies(movies){
-    const cinemaContainer = document.querySelector('.movies__cinemark');
-    const movieListElement = cinemaContainer.querySelector('.movie__list');
-
-    movies.forEach(movieData => {
-        const [title, length, classification, genres, cinemaName, originalTitle,
-        originCountry, director, actors, lenguage, img, synopsis] = movieData;
-        
-        if (cinemaName === "Cinemark") {
-            const movieItem = document.createElement('li');
-            movieItem.classList.add('movie__items');
-            movieItem.innerHTML = `
-                <figure class='movie__figure'>
-                    <img class= 'movie__img' src= '${img}'> 
-                    </img>
-                </figure>
-                <div class='movie__texts'>
-                    <strong>${title}</strong>
-                    <p>${cinemaName}</p>
-                </div>`;
-            movieListElement.appendChild(movieItem);
-        }
-    });
-}
-
-//Peliculas Izimovie
-function showIziMovies(movies){
-    const cinemaContainer = document.querySelector('.movies__izimovie');
-    const movieListElement = cinemaContainer.querySelector('.movie__list');
-
-    movies.forEach(movieData => {
-        const [title, length, classification, genres, cinemaName, originalTitle,
-        originCountry, director, actors, lenguage, img, synopsis] = movieData;
-        
-        if (cinemaName === "Izimovie") {
-            const movieItem = document.createElement('li');
-            movieItem.classList.add('movie__items');
-            movieItem.innerHTML = `
-                <figure class='movie__figure'>
-                    <img class= 'movie__img' src= '${img}'> 
-                    </img>
-                </figure>
-                <div class='movie__texts'>
-                    <strong>${title}</strong>
-                    <p>${cinemaName}</p>
-                </div>`;
-            movieListElement.appendChild(movieItem);
-        }
-    });
-}
-
-//Peliculas Izimovie
-function showRoyalfilmMovies(movies){
-    const cinemaContainer = document.querySelector('.movies__royalfilms');
-    const movieListElement = cinemaContainer.querySelector('.movie__list');
-
-    movies.forEach(movieData => {
-        const [title, length, classification, genres, cinemaName, originalTitle,
-        originCountry, director, actors, lenguage, img, synopsis] = movieData;
-        
-        if (cinemaName === "Royalfilms") {
-            const movieItem = document.createElement('li');
-            movieItem.classList.add('movie__items');
-            movieItem.innerHTML = `
-                <figure class='movie__figure'>
-                    <img class= 'movie__img' src= '${img}'> 
-                    </img>
-                </figure>
-                <div class='movie__texts'>
-                    <strong>${title}</strong>
-                    <p>${cinemaName}</p>
-                </div>`;
+        if (movieData[4] === cinemaName) { // Obtener el nombre del cine desde movieData
+            const movieItem = createMovieElements(movieData);
             movieListElement.appendChild(movieItem);
         }
     });
@@ -226,28 +116,12 @@ function showRoyalfilmMovies(movies){
 function initialize() {
     loadMovies()
         .then(movies => {
-            // showMovies(movies);
-            showCinecolombiaMovies(movies)
-            showCinepolisMovies(movies)
-            showCinemarkMovies(movies)
-            showIziMovies(movies)
-            showRoyalfilmMovies(movies)
+            showMoviesForCinema(movies, 'CineColombia', '.movies__cinecolombia');
+            showMoviesForCinema(movies, 'Cinepolis', '.movies__cinepolis');
+            showMoviesForCinema(movies, 'Cinemark', '.movies__cinemark');
+            showMoviesForCinema(movies, 'Izimovie', '.movies__izimovie');
+            showMoviesForCinema(movies, 'Royalfilms', '.movies__royalfilms');
         });
 }
 
 window.onload = initialize;
-
-
-//Funcionalidad del menu de seleccion
-document.getElementById("genre-select").addEventListener("change", function() {
-    var selectedGenero = this.value;
-  
-    var peliculas = document.querySelectorAll("../peliculas_data/peliculas.txt");
-    peliculas.forEach(function(peliculas_data) {
-      if (selectedGenero === "todos" || pelicula.classList.contains(selectedGenero)) {
-        pelicula.style.display = "block";
-      } else {
-        pelicula.style.display = "none";
-      }
-    });
-  });
