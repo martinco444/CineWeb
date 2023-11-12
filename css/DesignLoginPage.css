@@ -1,19 +1,19 @@
+* {
+  margin: 0;
+  box-sizing: border-box;
+}
+
 body{
   background-image: url("../img/sala-de-cine.jpg");
   background-size: cover;
+  font-family: 'Archivo', sans-serif;
   margin: 0;
   padding: 0;
-  height: 100vh; /*Establece el alto del cuerpo al 100% del viewport (ventana del navegador)*/
+  height: 100vh; 
 
-}
+} 
 
-form{
-  font-family: 'Poppins', sans-serif;
-  margin: 0;
-  padding: 0;
-}
-
-section{
+.login--section{
   display: flex;
   justify-content: center;
   align-items: center;
@@ -22,7 +22,7 @@ section{
 
 }
 
-.contender{
+.login--container{
   position: relative;
   width: 400px;
   border: 2px solid rgba(255, 255, 255, .6);
@@ -30,13 +30,14 @@ section{
   backdrop-filter: blur(10px);
   height: 500px;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
 }
 
-.contender h2{
+.login--title{
   font-size: 2.3rem;
-  color: #fff;
+  color: #3f2929;
   text-align: center;
 }
 
@@ -84,30 +85,36 @@ input:valid ~ label{
 
 }
 
-.forgot{
-  margin: -15px 0 15px;
+.forgot--container{
+  margin-bottom: 15px;
   font-size: .9em;
   color: #fff;
   display: flex;
+  flex-direction: column;
   justify-content: center;
+  gap: 10px
 }
 
-.forgot label input{
+.forgot--container label input{
   margin: 3px;
 }
 
-.forgot label a{
+.forgot--container a{
   color: #fff;
   text-decoration: none;
   transition: .3s;
   font-size: .9em;
 }
 
-.forgot label a:hover{
+.forgot--container a:hover{
   text-decoration: underline;
 }
 
-.log button{
+.login__button--container{
+  width: 80%;
+}
+
+.login--button{
   width: 100%;
   height: 45px;
   border-radius: 40px;
@@ -121,25 +128,25 @@ input:valid ~ label{
   transition: .4s;
 }
 
-.log button:hover{
+.login--button:hover{
   opacity: .9;
 }
 
-.register{
+.register--container{
   font-size: .8rem;
   color: #fff;
   text-align: center;
   margin: 20px 0 10px;
 }
 
-.register a {
+.register--container a {
   text-decoration: none;
   color: #fff;
   font-weight: bold;
   transition: .3s;
 }
 
-.register a:hover{
+.register--container a:hover{
   text-decoration: underline;
 }
 
