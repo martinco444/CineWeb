@@ -2,63 +2,63 @@
 
 <html lang="es">
 
-  <head>
-    <meta charset="UTF-8">
-    <script src="https://kit.fontawesome.com/7f5c9cd26d.js" crossorigin="anonymous"></script>
-    <script src="../js/Base_Datos.js"></script>
-    <meta name="viewport"
-         content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+<head>
+	<meta charset="UTF-8">
+	<script src="https://kit.fontawesome.com/7f5c9cd26d.js" crossorigin="anonymous"></script>
+	<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<link rel="stylesheet" type="text/css" href="../css/DesignRegisterUser.css">
 
-    <link rel="stylesheet" type="text/css" href="../css/DesignRegisterUser.css">
+	<title>Register User</title>
+</head>
 
-   <title>Register User</title>
-  </head>
+<body>
+	<section class="register--section">
+		<div class="register--container">
+			<div class="form">
 
-  <body>
-    <section>
-      <!-- contender where the user writes the access credentials -->
-      <div class="contender">
-         <div class="form">
-           <form action="#">
+				<div class="register__title--container">
+					<h2 class="register--title">Credentials</h2>
+				</div>
 
-             <h2>Credentials</h2>
+				<div class="input-contender">
+					<i class="fa-solid fa-envelope"></i>
+					<input id="email" type="email" required>
+					<label for="#">Email</label>
+				</div>
 
-             <!-- label to write the email -->
-            <div class="input-contender">
-              <i class="fa-solid fa-envelope"></i>
-               <input type="email" required>
-               <label for="#">Email</label>
-            </div>
+				<div class="input-contender">
+					<i class="fa-solid fa-envelope"></i>
+					<input type="email" required>
+					<label for="#">Verifica tu email</label>
+				</div>
 
-             <div class="input-contender">
-               <i class="fa-solid fa-envelope"></i>
-               <input type="email" required>
-               <label for="#">Verify your email</label>
-             </div>
+				<div class="input-contender">
+					<i class="fa-solid fa-lock"></i>
+					<input id="password" type="Password" required>
+					<label for="#">Contraseña</label>
+				</div>
 
-             <!-- label to write the password -->
-             <div class="input-contender">
-               <i class="fa-solid fa-lock"></i>
-                <input type="Password" required>
-               <label for="#">Password</label>
-             </div>
+				<div class="input-contender">
+					<i class="fa-solid fa-lock"></i>
+					<input type="Password" required>
+					<label for="#">Verifica tu contraseña</label>
+				</div>
 
-             <!-- label to write the password -->
-             <div class="input-contender">
-               <i class="fa-solid fa-lock"></i>
-               <input type="Password" required>
-               <label for="#">Verify your password</label>
-             </div>
+				<div class="register__button--container">
+					<button id="registerButton" class="register--button">Create account</button>
+				</div>
 
-            <!--Login button-->
-             <div class="log">
-                <button>Create account</button>
-             </div><br>
+				<div class="goBack--container">
+					<a class="goBack--button" href="LoginPage.html">Volver</button>
+				</div>
 
-          </form>
-         </div>
-      </div>
-   </section>
-  </body>
+			</div>
+		</div>
+	</section>
+
+	<script type="module" src="../js/register.js"></script>
+	<script type="module" src="../js/Base_Datos.js"></script>
+</body>
+
 </html>
