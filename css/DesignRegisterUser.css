@@ -1,144 +1,140 @@
-body{
-  background-image: url("../img/cinema.jpg");
-  background-size: cover;
-  margin: 0;
-  padding: 0;
-  height: 100vh; /*Establece el alto del cuerpo al 100% del viewport (ventana del navegador)*/
+* {
+	margin: 0;
+	box-sizing: border-box;
+}
+
+body {
+	background-image: url("../img/cinema.jpg");
+	background-size: cover;
+	font-family: 'Archivo', sans-serif;
+	margin: 0;
+	padding: 0;
+	height: 100vh;
 
 }
 
-form{
-  font-family: 'Poppins', sans-serif;
-  margin: 0;
-  padding: 0;
-}
-
-section{
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  min-height: 100vh;
+.register--section {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 100%;
+	min-height: 100vh;
 
 }
 
-.contender{
-  position: relative;
-  width: 400px;
-  border: 2px solid rgba(255, 255, 255, .6);
-  border-radius: 20px;
-  backdrop-filter: blur(10px);
-  height: 600px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+.register--container {
+	position: relative;
+	width: 400px;
+	border: 2px solid rgba(255, 255, 255, .6);
+	border-radius: 20px;
+	backdrop-filter: blur(10px);
+	height: 600px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
 }
 
-.contender h2{
-  font-size: 2.3rem;
-  color: #fff;
-  text-align: center;
+.register--title {
+	font-size: 2.3rem;
+	color: #fff;
+	text-align: center;
 }
 
-.input-contender{
-  position: relative;
-  margin: 30px 0;
-  width: 300px;
-  border-bottom: 2px solid #ffffff;
+.input-contender {
+	position: relative;
+	margin: 30px 0;
+	width: 300px;
+	border-bottom: 2px solid #ffffff;
 }
 
-.input-contender label{
-  position: absolute;
-  top: 50%;
-  left: 5px;
-  transform: translateY(-50%);
-  color: #ffffff;
-  font-size: 1rem;
-  pointer-events: none;
-  transition: .6s;
-  font-weight: bold;
+.input-contender label {
+	position: absolute;
+	top: 50%;
+	left: 5px;
+	transform: translateY(-50%);
+	color: #ffffff;
+	font-size: 1rem;
+	pointer-events: none;
+	transition: .6s;
+	font-weight: bold;
 }
 
-input:focus ~ label,
-input:valid ~ label{
-  top: -5px;
+input:focus~label,
+input:valid~label {
+	top: -5px;
 }
 
-.input-contender input{
-  width: 100%;
-  height: 50px;
-  background-color: transparent;
-  border: none;
-  outline: none;
-  font-size: 1rem;
-  padding: 15px 0 5px;
-  color: #ffffff;
+.input-contender input {
+	width: 100%;
+	height: 50px;
+	background-color: transparent;
+	border: none;
+	outline: none;
+	font-size: 1rem;
+	padding: 15px 0 5px;
+	color: #ffffff;
 }
 
-.input-contender i{
-  position: absolute;
-  color: #ffffff;
-  font-size: 1.6rem;
-  top: 19px;
-  right: 8px;
+.input-contender i {
+	position: absolute;
+	color: #ffffff;
+	font-size: 1.6rem;
+	top: 19px;
+	right: 8px;
 
 }
 
-.forgot{
-  margin: -15px 0 15px;
-  font-size: .9em;
-  color: #fff;
-  display: flex;
-  justify-content: center;
+.register--button {
+	width: 100%;
+	height: 45px;
+	border-radius: 40px;
+	background-color: darkred;
+	border: white;
+	font-weight: bold;
+	color: white;
+	cursor: pointer;
+	outline: none;
+	font-size: 1rem;
+	transition: .4s;
 }
 
-.forgot label input{
-  margin: 3px;
+.register--button:hover {
+	opacity: .9;
 }
 
-.forgot label a{
-  color: #fff;
-  text-decoration: none;
-  transition: .3s;
-  font-size: .9em;
-}
-
-.forgot label a:hover{
-  text-decoration: underline;
-}
-
-.log button{
-  width: 100%;
-  height: 45px;
-  border-radius: 40px;
-  background-color: darkred;
-  border: white;
-  font-weight: bold;
-  color: white;
-  cursor: pointer;
-  outline: none;
-  font-size: 1rem;
-  transition: .4s;
-}
-
-.log button:hover{
-  opacity: .9;
-}
-
-.register{
-  font-size: .8rem;
-  color: #fff;
-  text-align: center;
-  margin: 20px 0 10px;
+.register {
+	font-size: .8rem;
+	color: #fff;
+	text-align: center;
+	margin: 20px 0 10px;
 }
 
 .register a {
-  text-decoration: none;
-  color: #fff;
-  font-weight: bold;
-  transition: .3s;
+	text-decoration: none;
+	color: #fff;
+	font-weight: bold;
+	transition: .3s;
 }
 
-.register a:hover{
-  text-decoration: underline;
+.register a:hover {
+	text-decoration: underline;
+}
+
+.goBack--container {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	margin-top: 15px;
+	
+}
+
+.goBack--button{
+	cursor: pointer;
+	color: #fff;
+	font-weight: bold;
+	text-decoration: none;
+}
+
+.goBack--button:hover{
+	text-decoration: underline;
 }
