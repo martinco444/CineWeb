@@ -2,60 +2,61 @@
 
 <html lang="es">
 
-  <head>
+<head>
+	<meta charset="UTF-8">
+	<script src="https://kit.fontawesome.com/7f5c9cd26d.js" crossorigin="anonymous"></script>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://kit.fontawesome.com/7f5c9cd26d.js" crossorigin="anonymous"></script>
-    <script src="../js/Base_Datos.js"></script>
-    <link rel="stylesheet" type="text/css" href="../css/DesignLoginPage.css">
-    <title>Login Page</title>
-  </head>
+	<script src="https://kit.fontawesome.com/7f5c9cd26d.js" crossorigin="anonymous"></script>
+	<link rel="stylesheet" type="text/css" href="../css/DesignLoginPage.css">
+	<script>
+	src="js/login.js"
+	src="https://code.jquery.com/jquery-3.6.0.min.js"
+	</script>
+	<title>Login Page</title>
+</head>
 
-  <body>
+<body>
+	<section class="login--section">
+		<div class="login--container">
+			
 
-    <section>
-      <!-- contender where the user writes the access credentials -->
-      <div class="contender">
-        <div class="form">
-          <form action="CineWeb.html">
+			<div class="login__title--container">
+				<h2 class="login--title">Login</h2>
+			</div>
+			
+			<div class="email--input input-contender">
+				<i class="fa-solid fa-envelope"></i>
+				<input id="email" type="email" required>
+				<label>Email</label>
+			</div>
 
-            <h2>Login</h2>
+			<div class="password--input input-contender">
+				<i class="fa-solid fa-lock"></i>
+				<input id="password" type="Password" required>
+				<label>Contraseña</label>
+			</div>
 
-            <!-- label to write the email -->
-            <div class="input-contender">
-              <i class="fa-solid fa-envelope"></i>
-              <input type="email" required>
-              <label>Email</label>
-            </div>
+			<div class="forgot--container">
+				<label>
+					<input type="checkbox"> Recuérdame
+					<hr>
+				</label>
+				<a class="forgot--password" href="#">Olvidé mi constraseña</a>
+			</div>
 
-            <!-- label to write the password -->
-            <div class="input-contender">
-              <i class="fa-solid fa-lock"></i>
-              <input type="Password" required>
-              <label>Password</label>
-            </div>
+			<div class="login__button--container">
+				<button id="loginButton" class="login--button">Login</button>
+			  </div>
 
-            <!-- button in case of lost the password -->
-            <div class="forgot">
-              <label>
-                <input type="checkbox"> Remember<br><hr>
-                <a href="#">Forgot my password</a>
-              </label>
-            </div><br>
-            
-            <!--Login button-->
-            <div class="log">
-              <button>Login</button>
-            </div><br>
+			<div class="register--container">
+				<a href="RegisterUser.html">Crear cuenta</a>
+			</div>
+				
+		</div>
+	</section>
 
-            <div class="register">
-              <a href="RegisterUser.html">Create account</a>
-            </div>
-          </form>
-        </div>
-      </div>
-    </section>
-  </body>
-
+	<script type="module" src="../js/login.js"></script>
+	<script type="module" src="../js/Base_Datos.js"></script>
+</body>
 </html>
