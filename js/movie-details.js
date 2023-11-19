@@ -1,16 +1,18 @@
-const menu = document.querySelector('.nav__menu');
-const menuList = document.querySelector('.nav__list')
-const links = document.querySelectorAll('.nav__link')
+function navResponsive() {
+    const menu = document.querySelector('.nav__menu');
+    const menuList = document.querySelector('.nav__list')
+    const links = document.querySelectorAll('.nav__link')
 
-menu.addEventListener('click', function () {
-    menuList.classList.toggle('nav__list--show')
-});
+    menu.addEventListener('click', function () {
+        menuList.classList.toggle('nav__list--show')
+    });
 
-links.forEach(function (link) {
-    link.addEventListener('click', function () {
-        menuList.classList.remove('nav__list--show')
-    })
-});
+    links.forEach(function (link) {
+        link.addEventListener('click', function () {
+            menuList.classList.remove('nav__list--show')
+        })
+    });
+}
 
 //Cargar peliculas
 function loadMovies() {
@@ -40,58 +42,41 @@ function loadFunctions() {
         });
 }
 
-
-function normalizeTitle(title) {
+function normalizeText(text) {
     // Usa el método normalize para convertir a la forma normalizada (NFC)
-    return title.normalize("NFC").toLowerCase();
+    return text.normalize("NFC").toLowerCase();
 }
 
-function initialize() {
-    loadMovies().then(movies => {
-        // Obtener el título de la película desde los parámetros de consulta en la URL
-        const params = new URLSearchParams(window.location.search);
-        const movieTitle = params.get('title');
+function handleMovieDetails(movies) {
+    // Obtener el título de la película desde los parámetros de consulta en la URL
+    const params = new URLSearchParams(window.location.search);
+    const movieTitle = params.get('title');
+    const cinema = params.get('cinema')
 
-        if (movieTitle) {
-            const normalizedTitle = normalizeTitle(movieTitle);
-            // Busca la película con el título normalizado
-            const movieData = movies.find(movie => normalizeTitle(movie[0]) === normalizedTitle);
+    if (movieTitle && cinema) {
+        // Normalizar el texto obtenido de los parametros
+        const normalizedMovieTitle = normalizeText(movieTitle)
+        const normalizedCinema = normalizeText(cinema)
 
-            if (movieData) {
-                const [title, length, classification, genres, cinemaName, originalTitle,
-                    originCountry, director, actors, lenguage, img, synopsis] = movieData;
+        // Buscar la película del cine correspondiente
+        const movieData = movies.find(movie => normalizeText(movie[0]) === normalizedMovieTitle &&
+            normalizeText(movie[4]) === normalizedCinema);
 
-                // cargar imágen
-                const movieFigure = document.querySelector('.movie__figure')
-                const imgElement = document.querySelector('.movie__img');
-                imgElement.src = img;
-                movieFigure.appendChild(imgElement);
+        if (movieData && cinema) {
+            const [title, length, classification, genres, cinemaName, originalTitle,
+                originCountry, director, actors, lenguage, img, synopsis] = movieData;
 
-                //cargar información
-                const info = document.querySelector('.movie__details')
-                //verificar contenido
+            // cargar imágen
+            const movieFigure = document.querySelector('.movie__figure')
+            const imgElement = document.querySelector('.movie__img');
+            imgElement.src = img;
+            movieFigure.appendChild(imgElement);
 
-                info.innerHTML =
-                    `
-                <div class="movie__details-card">
+            //cargar información
+            const info = document.querySelector('.movie__details')
 
-                    <div class="movie__close-button">X</div>
-                    <h3 class='movie__director'> 
-                        Director: ${director}
-                    </h3>
-                    <h3 class='movie__actors'>
-                        Actores: ${actors}
-                    </h3>
-                    <h3 class='movie__originalTitle'>
-                        Titulo original: ${originalTitle}
-                    </h3>
-                    <h3 class='movie__originCountry'>
-                        País de origen: ${originCountry}
-                    </h3>
-                    <h3 class='movie__lenguage'>
-                        Idioma original: ${lenguage}
-                    </h3>
-                </div>
+            info.innerHTML =
+                `
                 <h2 class='movie__title'>
                     ${title}
                 </h2>
@@ -116,40 +101,52 @@ function initialize() {
                 </p>
                 `;
 
-                // abrir card de detalles
-                const button = document.querySelector('.movie__button-details');
-                const card = document.querySelector('.movie__details-card');
+            // abrir detalles de las películas
+            const button = document.querySelector('.movie__button-details');
+            const movieDetailsText = [
+                director && `<h4 class='movie__details--feature'>Director: </h4> <p class='movie__details--text'>${director}</p>`,
+                originalTitle && `<h4 class='movie__details--feature'>Titulo original: </h4> <p class='movie__details--text'>${originalTitle}</p>`,
+                actors && `<h4 class='movie__details--feature'>Actores: </h4> <p class='movie__details--text'>${actors}</p>`,
+                originCountry && `<h4 class='movie__details--feature'>País de origen: </h4> <p class='movie__details--text'>${originCountry}</p>`,
+                lenguage && `<h4 class='movie__details--feature'>Idioma original: </h4> <p class='movie__details--text'>${lenguage}</p>`
+            ].filter(Boolean).join('\n') || 'No hay detalles disponibles para esta película';
 
-                button.addEventListener('click', function () {
-                    card.style.display = 'flex';
+            button.addEventListener('click', function () {
+                swal.fire({
+                    title: 'Detalles Película',
+                    html: movieDetailsText
                 });
+            });
 
-                //cerrar card de detalles
-                const closeButton = document.querySelector('.movie__close-button');
-
-                closeButton.addEventListener('click', () => {
-                    card.style.display = 'none';
-                    // Aquí puedes agregar lógica adicional si es necesario al cerrar la tarjeta.
-                });
-            } else {
-                console.error('Película no encontrada');
-            }
         } else {
-            console.error('Falta el título de la película en los parámetros de consulta de la URL');
+            console.error('Película no encontrada');
         }
-    });
+    } else {
+        console.error('Falta el título de la película en los parámetros de consulta de la URL');
+    }
 
-    loadFunctions().then(functionsData => {
-        const params = new URLSearchParams(window.location.search);
-        const movieTitle = params.get('title');
+    navResponsive()
+}
+
+function handleMovieFunctions(functionsData) {
+    const params = new URLSearchParams(window.location.search);
+    const movieTitle = params.get('title');
+    const cinema = params.get('cinema')
+
+    if (movieTitle && cinema) {
+        // Normalizar el texto obtenido de los parametros
+        const normalizedMovieTitle = normalizeText(movieTitle)
+        const normalizedCinema = normalizeText(cinema)
 
         const functionsList = document.querySelector('.functions__list');
         const groupedFunctions = {};
 
         functionsData.forEach(functionData => {
-            const [title, room, format, schedule, link] = functionData;
+            const [title, cinemaName, room, format, schedule, link] = functionData;
+            const normalizedTitle = normalizeText(title)
+            const normalizedCinemaName = normalizeText(cinemaName)
 
-            if (title === movieTitle) {
+            if (normalizedTitle === normalizedMovieTitle && normalizedCinemaName === normalizedCinema) {
                 // Agrupar funciones por sala y formato
                 if (!groupedFunctions[room]) {
                     groupedFunctions[room] = {};
@@ -166,16 +163,16 @@ function initialize() {
             const roomItem = document.createElement('li');
             roomItem.classList.add('function__container');
             roomItem.innerHTML = `
-            <a class='function__link'>
-                <div class='function__item''>
-                    <h3 class='room__title'>
-                        Sala: ${room}
-                    </h3>
-                    <ul class='function__room'></ul>
-                </div>
-            </a>
+                <a class='function__link'>
+                    <div class='function__item''>
+                        <h3 class='room__title'>
+                            Sala: ${room}
+                        </h3>
+                        <ul class='function__room'></ul>
+                    </div>
+                </a>
             `;
-            const linkItem = roomItem.querySelector('.function__link'); 
+            const linkItem = roomItem.querySelector('.function__link');
             const roomList = roomItem.querySelector('ul');
 
             for (const format in groupedFunctions[room]) {
@@ -190,7 +187,7 @@ function initialize() {
                 const formatList = formatItem.querySelector('ul');
 
                 groupedFunctions[room][format].forEach(functionData => {
-                    const {schedule, link} = functionData;
+                    const { schedule, link } = functionData;
                     linkItem.href = link;
 
                     const functionItem = document.createElement('li');
@@ -220,7 +217,39 @@ function initialize() {
             `;
             functionsList.appendChild(noFunctions);
         }
+
+        const linkItem = document.querySelector('.function__link');
+        buttonLink = document.querySelectorAll('.function__container')
+        buttonLink.forEach(button => {
+            button.addEventListener('click', function (event) {
+                event.preventDefault()
+                Swal.fire({
+                    title: '¿Seguro que deseas continuar?',
+                    text: 'Serás redirigido a la página del cine seleccionado',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Aceptar',
+                    cancelButtonText: 'Cancelar',
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.open(linkItem.href); // Redirigir si se confirma
+                    } else if (result.dismiss === Swal.DismissReason.cancel) {}
+                });                  
+            })
+        })
+    }
+}
+
+function initialize() {
+    loadMovies().then(movies => {
+        handleMovieDetails(movies);
+    });
+
+    loadFunctions().then(functionsData => {
+        handleMovieFunctions(functionsData);
     });
 }
 
-window.onload = initialize;
+document.addEventListener("DOMContentLoaded", function () {
+    initialize();
+});
