@@ -5,55 +5,63 @@
 <head>
 	<meta charset="UTF-8">
 	<script src="https://kit.fontawesome.com/7f5c9cd26d.js" crossorigin="anonymous"></script>
-	<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+	<meta name="viewport"
+		content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
 	<meta http-equiv="X-UA-Compatible" content="ie=edge">
 	<link rel="stylesheet" type="text/css" href="../css/DesignRegisterUser.css">
-
+	<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@300;400;500;700&display=swap" rel="stylesheet">
+	<link rel="icon" href="../img/favIcon.svg">
 	<title>Register User</title>
 </head>
 
 <body>
 	<section class="register--section">
 		<div class="register--container">
-			<div class="form">
+			<form class="register--form">
 
 				<div class="register__title--container">
-					<h2 class="register--title">Credentials</h2>
+					<h2 class="register--title">Crea tu cuenta</h2>
 				</div>
 
 				<div class="input-contender">
 					<i class="fa-solid fa-envelope"></i>
-					<input id="email" type="email" required>
-					<label for="#">Email</label>
-				</div>
-
-				<div class="input-contender">
-					<i class="fa-solid fa-envelope"></i>
-					<input type="email" required>
-					<label for="#">Verifica tu email</label>
+					<input class="input" id="email" type="email" required>
+					<label for="#">Correo electrónico</label>
 				</div>
 
 				<div class="input-contender">
 					<i class="fa-solid fa-lock"></i>
-					<input id="password" type="Password" required>
+					<input class="input" id="password" type="Password" required>
 					<label for="#">Contraseña</label>
 				</div>
 
-				<div class="input-contender">
-					<i class="fa-solid fa-lock"></i>
-					<input type="Password" required>
-					<label for="#">Verifica tu contraseña</label>
+				<div class="genres-contender">
+					<label for="genres">Selecciona tu género favorito:</label>
+					<select name="genres" id="genres--selector">
+						<option value="acción">Acción</option>
+						<option value="animación">Animación</option>
+						<option value="aventura">Aventura</option>
+						<option value="comedia">Comedia</option>
+						<option value="drama">Drama</option>
+						<option value="documental">Documental</option>
+						<option value="infantil">Infantil</option>
+						<option value="misterio">Misterio</option>
+						<option value="suspenso">Suspenso</option>
+						<option value="terror">Terror</option>
+						<option value="">Ninguno</option>
+					</select>
 				</div>
 
 				<div class="register__button--container">
-					<button id="registerButton" class="register--button">Create account</button>
+					<button id="registerButton" class="register--button">Crear cuenta</button>
 				</div>
 
 				<div class="goBack--container">
 					<a class="goBack--button" href="LoginPage.html">Volver</button>
 				</div>
 
-			</div>
+			</form>
 		</div>
 	</section>
 
