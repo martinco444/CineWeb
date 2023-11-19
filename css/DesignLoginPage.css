@@ -27,25 +27,39 @@ body{
   width: 400px;
   border: 2px solid rgba(255, 255, 255, .6);
   border-radius: 20px;
-  backdrop-filter: blur(10px);
+  backdrop-filter: blur(15px);
+  background-color: rgba(0, 0, 0, 0.5);
   height: 500px;
   display: flex;
-  flex-direction: column;
   justify-content: center;
   align-items: center;
 }
 
+.login--form{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+}
+
 .login--title{
   font-size: 2.3rem;
-  color: #3f2929;
+  color: #ffffff;
   text-align: center;
+  margin-bottom: 20px;
+}
+
+.input:-webkit-autofill {
+	-webkit-box-shadow:  0 0 0 1000px rgba(255, 0, 0, 0.5) inset !important;
 }
 
 .input-contender{
   position: relative;
   margin: 30px 0;
   width: 300px;
-  border-bottom: 2px solid #555555;
+  border-bottom: 2px solid #ffffff;
 }
 
 .input-contender label{
@@ -53,16 +67,11 @@ body{
   top: 50%;
   left: 5px;
   transform: translateY(-50%);
-  color: #555555;
+  color: #ffffff;
   font-size: 1rem;
   pointer-events: none;
   transition: .6s;
   font-weight: bold;
-}
-
-input:focus ~ label,
-input:valid ~ label{
-  top: -5px;
 }
 
 .input-contender input{
@@ -73,12 +82,12 @@ input:valid ~ label{
   outline: none;
   font-size: 1rem;
   padding: 15px 0 5px;
-  color: #555555;
+  color: #ffffff;
 }
 
 .input-contender i{
   position: absolute;
-  color: #555555;
+  color: #ffffff;
   font-size: 1.6rem;
   top: 19px;
   right: 8px;
@@ -133,7 +142,7 @@ input:valid ~ label{
 }
 
 .register--container{
-  font-size: .8rem;
+  font-size: 1rem;
   color: #fff;
   text-align: center;
   margin: 20px 0 10px;
@@ -150,11 +159,10 @@ input:valid ~ label{
   text-decoration: underline;
 }
 
+.swal2-confirm{
+  background-color: #9F161A !important
+}
 
-
-
-
-
-
-
-
+.swal-confirm:not([disabled]):hover {
+  background-color: #800e13 !important;
+}
