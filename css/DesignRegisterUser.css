@@ -34,10 +34,20 @@ body {
 	align-items: center;
 }
 
+.register--form {
+	width: 100%;
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+}
+
 .register--title {
 	font-size: 2.3rem;
 	color: #fff;
 	text-align: center;
+	margin-bottom: 20px;
 }
 
 .input-contender {
@@ -45,6 +55,32 @@ body {
 	margin: 30px 0;
 	width: 300px;
 	border-bottom: 2px solid #ffffff;
+}
+
+.genres-contender {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	align-items: center;
+	margin: 30px 0;
+	width: 300px;
+	border-bottom: 2px solid #ffffff;
+}
+
+.genres-contender select {
+	background-color: #252525;
+	border-radius: 5px;
+}
+
+.genres-contender label,
+.genres-contender select {
+	color: #ffffff;
+	font-size: 1rem;
+	margin-bottom: 20px;
+}
+
+.input:-webkit-autofill {
+	-webkit-box-shadow: 0 0 0 1000px rgba(255, 0, 0, 0.5) inset !important;
 }
 
 .input-contender label {
@@ -82,6 +118,10 @@ input:valid~label {
 	top: 19px;
 	right: 8px;
 
+}
+
+.register__button--container {
+	width: 80%;
 }
 
 .register--button {
@@ -125,16 +165,24 @@ input:valid~label {
 	justify-content: center;
 	align-items: center;
 	margin-top: 15px;
-	
+
 }
 
-.goBack--button{
+.goBack--button {
 	cursor: pointer;
 	color: #fff;
 	font-weight: bold;
 	text-decoration: none;
 }
 
-.goBack--button:hover{
+.goBack--button:hover {
 	text-decoration: underline;
+}
+
+.swal2-confirm {
+	background-color: #9F161A !important
+}
+
+.swal-confirm:not([disabled]):hover {
+	background-color: #800e13 !important;
 }
