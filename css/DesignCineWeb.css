@@ -3,28 +3,6 @@
     box-sizing: border-box;
 }
 
-.genre-menu {
-    text-align: left;
-    display: flex;
-    flex-direction: column;
-}
-
-/* Estiliza el menú desplegable */
-#genre-select {
-    padding: 10px;
-    font-size: 16px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    background-color: #fff;
-
-}
-
-/* Estilo para opciones seleccionadas */
-#genre-select option:checked {
-    background-color: #121212;
-    color: #fff;
-}
-
 :root {
     scroll-behavior: smooth;
     --red: #a4161a;
@@ -97,7 +75,7 @@ body {
     padding: 0 25px;
 }
 
-.nav__link, .cinema__link {
+.nav__link, .cinema__link, .nav__scroll {
     text-decoration: none;
     color: #fff;
     font-weight: 500;
@@ -106,7 +84,6 @@ body {
 
 .nav__logo {
     max-width: 180px;
-
 }
 
 .nav__logo--link {
@@ -142,7 +119,7 @@ body {
 }
 
 .search__container:hover > .search__input {
-    width: 20rem;
+    width: 15rem;
     padding: 0 6px;
     
 }
@@ -237,7 +214,51 @@ body {
     width: 100%;
 }
 
-.movies__container {
+.movies__genres{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    
+}
+
+.movie__genres--list{
+    display: flex;
+    align-items: center;
+    /* transition: transform 1s ease-in-out; */
+    justify-content: left;
+    overflow-x: hidden;
+    scroll-behavior: smooth;
+    padding: 0;
+}
+
+.movie__genres--list li{
+    margin: 0 10px;
+}
+
+.arrows__container{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 25%;
+}
+
+.arrow {
+    background-color: transparent;
+    color: #fff;
+    border: none;
+    font-size: 4rem;
+    cursor: pointer;
+}
+
+.arrow:hover{
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.movies__container,
+.movies__genres {
     margin: 0 auto;
     background-color: #121212;
     width: 90%;
@@ -276,7 +297,6 @@ body {
     padding: 0;
     grid-template-columns: repeat(auto-fit, minmax(235px, 1fr));
     gap: 50px 0;
-    /* margin-bottom: 20px; */
     list-style: none;
 }
 
@@ -285,6 +305,8 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
+    width: 230px;
+    justify-self: center;
 }
 
 .movie__texts {
@@ -312,6 +334,14 @@ body {
 
 .noMovies__message{
     font-size: 1.8rem;
+}
+
+.swal2-confirm {
+    background-color: #9F161A !important
+}
+
+.swal-confirm:not([disabled]):hover {
+    background-color: #800e13 !important;
 }
 
 /* footer */
